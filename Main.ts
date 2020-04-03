@@ -2,7 +2,7 @@ import { Game } from "./src/Game.js";
 import {gamePadHandler} from "./src/Gamepad.js";
 
 
-let keys = [];
+let keyBoardKeys = [];
 
 
 
@@ -12,9 +12,10 @@ function load() {
 
 
     function handleKeys() {
-        if (keys[37]) g.left();
-        if (keys[39]) g.right();
-        if (keys[38]) g.up();
+        if (keyBoardKeys[37]) console.log("left");
+        if (keyBoardKeys[37]) g.left();
+        if (keyBoardKeys[39]) g.right();
+        if (keyBoardKeys[38]) g.up();
     }
 
     function handleGamePad(gamePad: Gamepad) {
@@ -30,8 +31,8 @@ function load() {
         g.draw();
     })();
 
-    window.onkeydown = function (evt: KeyboardEvent) { keys[evt.keyCode] = evt.keyCode; }
-    window.onkeyup = function (evt: KeyboardEvent) { keys[evt.keyCode] = false; }
+    window.onkeydown = function (evt: KeyboardEvent) { keyBoardKeys[evt.keyCode] = evt.keyCode; console.log(evt.keyCode) }
+    window.onkeyup = function (evt: KeyboardEvent) { keyBoardKeys[evt.keyCode] = false; }
 
 }
 

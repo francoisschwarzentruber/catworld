@@ -1,15 +1,17 @@
 import { Game } from "./src/Game.js";
 import { gamePadHandler } from "./src/Gamepad.js";
-var keys = [];
+var keyBoardKeys = [];
 function load() {
     var canvas = document.getElementById("canvas");
     var g = new Game(canvas, "francois");
     function handleKeys() {
-        if (keys[37])
+        if (keyBoardKeys[37])
+            console.log("left");
+        if (keyBoardKeys[37])
             g.left();
-        if (keys[39])
+        if (keyBoardKeys[39])
             g.right();
-        if (keys[38])
+        if (keyBoardKeys[38])
             g.up();
     }
     function handleGamePad(gamePad) {
@@ -26,8 +28,8 @@ function load() {
         gamePadHandler(handleGamePad);
         g.draw();
     })();
-    window.onkeydown = function (evt) { keys[evt.keyCode] = evt.keyCode; };
-    window.onkeyup = function (evt) { keys[evt.keyCode] = false; };
+    window.onkeydown = function (evt) { keyBoardKeys[evt.keyCode] = evt.keyCode; console.log(evt.keyCode); };
+    window.onkeyup = function (evt) { keyBoardKeys[evt.keyCode] = false; };
 }
 load();
 //# sourceMappingURL=Main.js.map
