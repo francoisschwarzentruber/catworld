@@ -17,28 +17,22 @@ export class Game {
     }
 
     draw() {
-        for (let t = 0; t < 5; t++) {
-            let previousPosition = { x: this.dede.position.x, y: this.dede.position.y };
+        let previousPosition = { x: this.dede.position.x, y: this.dede.position.y };
 
-            let score = this.scene.getGoodPositionScore(this.dede);
-
-
-            this.dede.live();
-
-            if (this.scene.getGoodPositionScore(this.dede) < score) {
-                score = this.scene.getGoodPositionScore(this.dede);
-                this.dede.position.y-=10;
-                if (this.scene.getGoodPositionScore(this.dede) < score)
-                    this.dede.position = previousPosition;
-                else {
-                    this.dede.accel.y = 0;
-                    this.dede.speed.y = 0;
-                }
-                    
-            }
+        const vector = this.scene.getGoodPositionScore(this.dede);
 
 
+        this.dede.live();
 
+        for (let i = 0; i < 5; i++) {
+            const vector2 = this.scene.getGoodPositionScore(this.dede);
+
+            this.dede.position.x += vector2.x;
+            this.dede.position.y += vector2.y;
+            this.dede.speed.x += vector2.x;
+            this.dede.speed.y += vector2.y;
+            this.dede.accel.x += vector2.x;
+            this.dede.accel.y += vector2.y;
         }
         /*
 for (let t = 0; t < 3; t++) {
@@ -75,7 +69,11 @@ for (let t = 0; t < 3; t++) {
         this.scene.draw(context);
         this.dede.draw(context);
 
-        // context.resetTransform();
+        context.resetTransform();
+        context.strokeStyle = "#000000";
+        context.font = "20px Georgia";
+        context.strokeText(vector.x + "," + vector.y, 0, 20);
+
     }
 
 
