@@ -8,18 +8,18 @@ export class Game {
     private dede: Character;
     private scene: Scene;
     private imgBackground = new Image();
-    private lastLoop : Date = new Date();
+    private lastLoop: Date = new Date();
     private characters = [];
 
-    constructor(canvas: HTMLCanvasElement) {
+    constructor(canvas: HTMLCanvasElement, name: string) {
         this.canvas = canvas;
-        this.scene = new Scene();
-        this.dede = new Character("cat", { x: 200, y: 400 });
-            for(let i = 0; i<2 ; i++)
-                this.characters.push(new Character("white_collar", { x: Math.random()*500, y: 100 }));
+        this.scene = new Scene(name);
+        this.dede = new Character("cat", { x: 200, y: 200 });
+        for (let i = 0; i < 1; i++)
+            this.characters.push(new Character("white_collar", { x: Math.random() * 500, y: 100 }));
 
-        this.imgBackground.src = "./background_francois.png";
-       // this.imgBackground.src = "./fond_coeur.png";
+        this.imgBackground.src = "./" + name + "_background.png";
+        // this.imgBackground.src = "./fond_coeur.png";
     }
 
 
@@ -76,11 +76,11 @@ export class Game {
         if (camera.x < 0) camera.x = 0;
         if (camera.y < 0) camera.y = 0;
 
-        camera.y = Math.min(camera.y, this.scene.height - 480 /2);
-        camera.x = Math.min(camera.x, this.scene.width - 640 /2);
+        camera.y = Math.min(camera.y, this.scene.height - 480 / 2);
+        camera.x = Math.min(camera.x, this.scene.width - 640 / 2);
 
         let context = this.canvas.getContext("2d");
-        context.imageSmoothingEnabled= false;
+        context.imageSmoothingEnabled = false;
         context.clearRect(0, 0, 640, 480);
 
         context.resetTransform();
@@ -95,10 +95,12 @@ export class Game {
         context.scale(2, 2);
 
         this.scene.draw(context);
-        this.dede.draw(context);
+
 
         for (let character of this.characters)
             character.draw(context);
+        this.dede.draw(context);
+
 
         context.resetTransform();
         context.strokeStyle = "#000000";
