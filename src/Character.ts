@@ -59,6 +59,7 @@ export class Character {
 
 
     jump() {
+        console.log("jump");
         if (this.onFloor) {
            this.forceJump();
         }
@@ -66,6 +67,7 @@ export class Character {
 
 
     forceJump() {
+        console.log("forceJump");
         this.accel.y = -JUMP; this.speed.y = -JUMP / 10;
         this.onFloor = false;
     }
