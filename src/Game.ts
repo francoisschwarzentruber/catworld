@@ -1,38 +1,40 @@
-import { Cat } from './Cat.js';
+import { Vector2DUtility } from './Vector2D.js';
+import { Character } from './Character.js';
 import { Scene } from './Scene.js';
 
 
 export class Game {
     private canvas: HTMLCanvasElement;
-    private dede: Cat;
+    private dede: Character;
     private scene: Scene;
     private imgBackground = new Image();
 
     constructor(canvas: HTMLCanvasElement) {
         this.canvas = canvas;
         this.scene = new Scene();
-        this.dede = new Cat();
+        this.dede = new Character("cat");
 
         this.imgBackground.src = "./fond_coeur.png";
     }
 
     draw() {
-        let previousPosition = { x: this.dede.position.x, y: this.dede.position.y };
-
-        const vector = this.scene.getGoodPositionScore(this.dede);
-
-
         this.dede.live();
 
-        for (let i = 0; i < 5; i++) {
-            const vector2 = this.scene.getGoodPositionScore(this.dede);
+        for (let i = 0; i < 1; i++) {
+            const infoPosition = this.scene.getGoodPositionScore(this.dede);
 
-            this.dede.position.x += vector2.x;
-            this.dede.position.y += vector2.y;
-            this.dede.speed.x += vector2.x;
-            this.dede.speed.y += vector2.y;
-            this.dede.accel.x += vector2.x;
-            this.dede.accel.y += vector2.y;
+
+            this.dede.onFloor = infoPosition.onFloor;
+            
+            if(this.dede.onFloor)
+                this.dede.angle = infoPosition.angle;
+
+            this.dede.position.x += infoPosition.x;
+            this.dede.position.y += infoPosition.y;
+            this.dede.speed.x += infoPosition.x;
+            this.dede.speed.y += infoPosition.y;
+            this.dede.accel.x += infoPosition.x;
+            this.dede.accel.y += infoPosition.y;
         }
         /*
 for (let t = 0; t < 3; t++) {
@@ -72,7 +74,7 @@ for (let t = 0; t < 3; t++) {
         context.resetTransform();
         context.strokeStyle = "#000000";
         context.font = "20px Georgia";
-        context.strokeText(vector.x + "," + vector.y, 0, 20);
+         context.strokeText(this.dede.angle.toString(), 0, 20);
 
     }
 
