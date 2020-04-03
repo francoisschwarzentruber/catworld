@@ -3,7 +3,7 @@ import { gamePadHandler } from "./src/Gamepad.js";
 var keys = [];
 function load() {
     var canvas = document.getElementById("canvas");
-    var g = new Game(canvas, "karine");
+    var g = new Game(canvas, "francois");
     function handleKeys() {
         if (keys[37])
             g.left();

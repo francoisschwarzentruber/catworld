@@ -8,7 +8,7 @@ let keys = [];
 
 function load() {
     let canvas: HTMLCanvasElement = <HTMLCanvasElement>document.getElementById("canvas");
-    let g = new Game(canvas, "karine");
+    let g = new Game(canvas, "francois");
 
 
     function handleKeys() {

@@ -106,10 +106,10 @@ export class Game {
         context.strokeStyle = "#000000";
         context.font = "20px Georgia";
 
-        let thisLoop = new Date();
-        context.strokeText((1000 / (<any>thisLoop - <any>this.lastLoop)).toString(), 0, 20);
-
-        this.lastLoop = thisLoop;
+        /*     let thisLoop = new Date();
+             context.strokeText((1000 / (<any>thisLoop - <any>this.lastLoop)).toString(), 0, 20);
+     
+             this.lastLoop = thisLoop;*/
     }
 
 
