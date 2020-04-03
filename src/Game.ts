@@ -15,8 +15,8 @@ export class Game {
         this.canvas = canvas;
         this.scene = new Scene(name);
         this.dede = new Character("cat", { x: 200, y: 200 });
-        for (let i = 0; i < 1; i++)
-            this.characters.push(new Character("white_collar", { x: Math.random() * 500, y: 100 }));
+        for (let i = 0; i < 30; i++)
+            this.characters.push(new Character("white_collar", { x: Math.random() * 2000, y: 100 }));
 
         this.imgBackground.src = "./" + name + "_background.png";
         // this.imgBackground.src = "./fond_coeur.png";
