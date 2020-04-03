@@ -27,9 +27,10 @@ function load() {
         handleKeys();
         gamePadHandler(handleGamePad);
         g.draw();
+        //should be outside animLoop, but when outside, it does not work
+        window.onkeydown = function (evt) { keyBoardKeys[evt.keyCode] = evt.keyCode; console.log(evt.keyCode); };
+        window.onkeyup = function (evt) { keyBoardKeys[evt.keyCode] = false; console.log(evt.keyCode); };
     })();
-    window.onkeydown = function (evt) { keyBoardKeys[evt.keyCode] = evt.keyCode; console.log(evt.keyCode); };
-    window.onkeyup = function (evt) { keyBoardKeys[evt.keyCode] = false; };
 }
-load();
+window.onload = load;
 //# sourceMappingURL=Main.js.map
