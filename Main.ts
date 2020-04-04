@@ -10,13 +10,12 @@ function load() {
     let canvas: HTMLCanvasElement = <HTMLCanvasElement>document.getElementById("canvas");
     let g = new Game(canvas, "karine");
 
-
     function handleKeys() {
         if (keyBoardKeys[37]) console.log("left");
         if (keyBoardKeys[37]) g.left();
         if (keyBoardKeys[39]) g.right();
         if (keyBoardKeys[38]) g.up();
-        if (keyBoardKeys[22]) g.action();
+        if (keyBoardKeys[32]) g.action();
     }
 
     function handleGamePad(gamePad: Gamepad) {

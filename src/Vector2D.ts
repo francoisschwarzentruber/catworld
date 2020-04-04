@@ -11,4 +11,6 @@ export class Vector2DUtility {
             y: v.x * Math.sin(angle) + v.y * Math.cos(angle)
         };
     }
+
+    static copy(v: Vector2D) { return { x: v.x, y: v.y }; }
 }

@@ -13,7 +13,7 @@ function load() {
             g.right();
         if (keyBoardKeys[38])
             g.up();
-        if (keyBoardKeys[22])
+        if (keyBoardKeys[32])
             g.action();
     }
     function handleGamePad(gamePad) {

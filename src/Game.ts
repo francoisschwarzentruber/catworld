@@ -139,12 +139,7 @@ export class Game {
     }
 
     action() {
-        const HEART_THROW_STRENGTH = 30;
-        const HEART_THROW_HEIGHT = 10;
-        this.hearts.push(new Heart(this.dede.position,
-            {
-                x: HEART_THROW_STRENGTH * this.dede.direction.x,
-                y: HEART_THROW_STRENGTH * this.dede.direction.y + HEART_THROW_HEIGHT
-            }));
+     
+        this.hearts.push(new Heart(this.dede.position, this.dede.direction));
     }
 }
