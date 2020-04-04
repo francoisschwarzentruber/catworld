@@ -16,12 +16,15 @@ function load() {
         if (keyBoardKeys[37]) g.left();
         if (keyBoardKeys[39]) g.right();
         if (keyBoardKeys[38]) g.up();
+        if (keyBoardKeys[22]) g.action();
     }
 
     function handleGamePad(gamePad: Gamepad) {
-        if (gamePad.buttons[1].pressed) g.up();
+        
         if (gamePad.axes[6] < 0) g.left();
         if (gamePad.axes[6] > 0) g.right();
+        if (gamePad.buttons[1].pressed) g.up();
+        if (gamePad.buttons[0].pressed) g.action();
     }
 
     (function animloop() {

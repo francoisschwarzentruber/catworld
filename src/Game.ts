@@ -1,22 +1,24 @@
 import { Vector2DUtility } from './Vector2D.js';
-import { Character } from './Character.js';
+import { PhysicalObject } from './PhysicalObject.js';
 import { Scene } from './Scene.js';
+import { Heart } from './Heart.js';
 
 
 export class Game {
     private canvas: HTMLCanvasElement;
-    private dede: Character;
+    private dede: PhysicalObject;
     private scene: Scene;
     private imgBackground = new Image();
     private lastLoop: Date = new Date();
     private characters = [];
+    private hearts = [];
 
     constructor(canvas: HTMLCanvasElement, name: string) {
         this.canvas = canvas;
         this.scene = new Scene(name);
-        this.dede = new Character("cat", { x: 200, y: 200 });
-        for (let i = 0; i < 30; i++)
-            this.characters.push(new Character("white_collar", { x: Math.random() * 2000, y: 100 }));
+        this.dede = new PhysicalObject("cat", 48, { x: 2000, y: 150 });
+        /*    for (let i = 0; i < 30; i++)
+                this.characters.push(new Character("white_collar", { x: Math.random() * 2000, y: 100 }));*/
 
         this.imgBackground.src = "./" + name + "_background.png";
         // this.imgBackground.src = "./fond_coeur.png";
@@ -29,8 +31,7 @@ export class Game {
         const infoPosition = this.scene.getGoodPositionScore(character);
         character.onFloor = infoPosition.onFloor;
 
-        if (character.onFloor)
-            character.angle = infoPosition.angle;
+        character.angle = infoPosition.angle;
 
         character.position.x += infoPosition.x;
         character.position.y += infoPosition.y;
@@ -53,7 +54,7 @@ export class Game {
                     Math.abs((this.dede.position.y - 48) - character.position.y) < 60 &&
                     this.dede.isFalling()) {
                     console.log("un white_collar doit mourir");
-                    this.characters.push(new Character("gauchiste", character.position));
+                    this.characters.push(new PhysicalObject("gauchiste", 48, character.position));
                     this.removeCharacter(character);
                     this.dede.forceJump();
                     break;
@@ -61,6 +62,9 @@ export class Game {
 
 
         }
+
+
+
 
 
     }
@@ -71,6 +75,8 @@ export class Game {
         for (let character of this.characters)
             this.liveCharacter(character);
 
+        for (let heart of this.hearts)
+            heart.live();
         this.logic();
 
         let camera = { x: this.dede.position.x - 640 / 4, y: this.dede.position.y - 480 / 4 };
@@ -97,9 +103,12 @@ export class Game {
 
         this.scene.draw(context);
 
-
         for (let character of this.characters)
             character.draw(context);
+
+        for (let heart of this.hearts)
+            heart.draw(context);
+
         this.dede.draw(context);
 
 
@@ -127,5 +136,15 @@ export class Game {
 
     up() {
         this.dede.jump();
+    }
+
+    action() {
+        const HEART_THROW_STRENGTH = 30;
+        const HEART_THROW_HEIGHT = 10;
+        this.hearts.push(new Heart(this.dede.position,
+            {
+                x: HEART_THROW_STRENGTH * this.dede.direction.x,
+                y: HEART_THROW_STRENGTH * this.dede.direction.y + HEART_THROW_HEIGHT
+            }));
     }
 }
