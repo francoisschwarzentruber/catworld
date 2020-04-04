@@ -52,6 +52,7 @@ export class Game {
                 if (Math.abs(this.dede.position.x - character.position.x) < 32 &&
                     Math.abs((this.dede.position.y - 48) - character.position.y) < 60 &&
                     this.dede.isFalling()) {
+                    console.log("un white_collar doit mourir");
                     this.characters.push(new Character("gauchiste", character.position));
                     this.removeCharacter(character);
                     this.dede.forceJump();

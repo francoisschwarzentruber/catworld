@@ -72,8 +72,10 @@ export class Scene {
                 }
             return obj.size / 2;
         }
-        const FACTOR = 32 * 32;
+        
         const SIZE = obj.size;
+        const FACTOR = SIZE * SIZE;
+        
         let v = { x: 0, y: 0, onFloor: false, angle: 0.0 };
         for (let x = -SIZE / 2; x < SIZE / 2; x++)
             for (let y = -SIZE / 2; y < SIZE / 2; y++)
