@@ -13,4 +13,8 @@ export class Vector2DUtility {
     }
 
     static copy(v: Vector2D) { return { x: v.x, y: v.y }; }
+
+    static dist(a: Vector2D, b: Vector2D) {
+        return Math.sqrt((a.x - b.x) ** 2 + (a.y - b.y) ** 2);
+    }
 }

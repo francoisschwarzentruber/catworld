@@ -3,7 +3,7 @@ import { PhysicalObject } from "./PhysicalObject.js";
 
 export class Heart extends PhysicalObject {
     constructor(position, direction) {
-        const HEART_THROW_STRENGTH = 5;
+        const HEART_THROW_STRENGTH = 3;
         const HEART_THROW_HEIGHT = 1;
 
         super("heart", 16, position);

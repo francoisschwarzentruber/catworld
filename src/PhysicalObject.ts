@@ -80,4 +80,13 @@ export class PhysicalObject {
         context.rotate(-this.angle);
         context.translate(-this.position.x, -this.position.y);
     }
+
+
+
+    static intersect(o1, o2) {
+        if(Vector2DUtility.dist(o1.position, o2.position) < 32) {
+            return true;
+        }
+        return false;
+    }
 }

@@ -1,3 +1,4 @@
+import { PhysicalObject } from './PhysicalObject.js';
 import { Scene } from './Scene.js';
 import { Heart } from './Heart.js';
 import { Character } from './Character.js';
@@ -16,8 +17,8 @@ export class Game {
         this.canvas = canvas;
         this.scene = new Scene(name);
         this.dede = new Character("cat", 48, { x: 200, y: 50 });
-        /*    for (let i = 0; i < 30; i++)
-                this.characters.push(new Character("white_collar", { x: Math.random() * 2000, y: 100 }));*/
+        for (let i = 0; i < 50; i++)
+            this.characters.push(new Character("white_collar", 48, { x: Math.random() * 2000, y: 100 }));
 
         this.imgBackground.src = "./" + name + "_background.png";
         // this.imgBackground.src = "./fond_coeur.png";
@@ -45,6 +46,11 @@ export class Game {
         this.characters.splice(i, 1);
     }
 
+    removeHeart(heart) {
+        let i = this.hearts.indexOf(heart);
+        this.hearts.splice(i, 1);
+    }
+
 
     logic() {
         for (let character of this.characters) {
@@ -58,8 +64,18 @@ export class Game {
                     this.dede.forceJump();
                     break;
                 }
+        }
 
-
+        for (let heart of this.hearts) {
+            for (let character of this.characters)
+                if (character.name == "white_collar") {
+                    if (PhysicalObject.intersect(heart, character)) {
+                        console.log("un white_collar doit mourir");
+                        this.characters.push(new Character("gauchiste", 48, character.position));
+                        this.removeCharacter(character);
+                        this.removeHeart(heart);
+                    }
+                }
         }
 
 
@@ -138,7 +154,7 @@ export class Game {
     }
 
     action() {
-     
+
         this.hearts.push(new Heart(this.dede.position, this.dede.direction));
     }
 }
