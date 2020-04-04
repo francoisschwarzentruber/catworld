@@ -1,12 +1,11 @@
-import { Vector2DUtility } from './Vector2D.js';
-import { PhysicalObject } from './PhysicalObject.js';
 import { Scene } from './Scene.js';
 import { Heart } from './Heart.js';
+import { Character } from './Character.js';
 
 
 export class Game {
     private canvas: HTMLCanvasElement;
-    private dede: PhysicalObject;
+    private dede: Character;
     private scene: Scene;
     private imgBackground = new Image();
     private lastLoop: Date = new Date();
@@ -16,7 +15,7 @@ export class Game {
     constructor(canvas: HTMLCanvasElement, name: string) {
         this.canvas = canvas;
         this.scene = new Scene(name);
-        this.dede = new PhysicalObject("cat", 48, { x: 2000, y: 150 });
+        this.dede = new Character("cat", 48, { x: 200, y: 50 });
         /*    for (let i = 0; i < 30; i++)
                 this.characters.push(new Character("white_collar", { x: Math.random() * 2000, y: 100 }));*/
 
@@ -54,7 +53,7 @@ export class Game {
                     Math.abs((this.dede.position.y - 48) - character.position.y) < 60 &&
                     this.dede.isFalling()) {
                     console.log("un white_collar doit mourir");
-                    this.characters.push(new PhysicalObject("gauchiste", 48, character.position));
+                    this.characters.push(new Character("gauchiste", 48, character.position));
                     this.removeCharacter(character);
                     this.dede.forceJump();
                     break;

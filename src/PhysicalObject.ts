@@ -9,24 +9,24 @@ const JUMP = 400;
 const GRAVITYSPEED = 20;*/
 
 
-const SPEEDDECREASING = 0.5;
-const MOVEMENT = 10;
-const GRAVITY = 20;
-const DT = 0.5;
-const JUMP = 40;
-const GRAVITYSPEED = 2;
-
 export class PhysicalObject {
     public position: Vector2D;
-    public direction: Vector2D = {x:1, y:0};
+
     public speed: Vector2D;
     public accel: Vector2D;
-    private img;
-    private imgJump;
-    private imgLeft = new Image();
-    private imgRight = new Image();
-    private imgJumpLeft = this.imgLeft;
-    private imgJumpRight = this.imgRight;
+
+    SPEEDDECREASING = 0.5;
+    GRAVITY = 20;
+    readonly DT = 0.5;
+    
+    GRAVITYSPEED = 2;
+
+    protected img;
+    protected imgJump;
+    protected imgLeft = new Image();
+    protected imgRight = new Image();
+    protected imgJumpLeft = this.imgLeft;
+    protected imgJumpRight = this.imgRight;
     public onFloor: boolean = false;
     public angle = 0;
 
@@ -44,59 +44,30 @@ export class PhysicalObject {
 
     isFalling() { return this.speed.y > 5 && !this.onFloor; }
 
-    left() {
-        this.img = this.imgLeft;
-        this.imgJump = this.imgJumpLeft;
-        this.accel.x -= MOVEMENT;
-        this.direction = {x: -1, y:0};
-        //  this.position.x -= 5;
-    }
-    right() {
-        this.img = this.imgRight;
-        this.imgJump = this.imgJumpRight;
-        this.accel.x += MOVEMENT;
-        this.direction = {x: 1, y:0};
-        //this.position.x += 5;
-    }
-
-
-    jump() {
-        console.log("jump");
-        if (this.onFloor) {
-           this.forceJump();
-        }
-    }
-
-
-    forceJump() {
-        console.log("forceJump");
-        this.accel.y = -JUMP; this.speed.y = -JUMP / 10;
-        this.onFloor = false;
-    }
 
 
     live() {
         // if (Math.abs(this.speed.x * DT) < 2 && Math.abs(this.speed.y * DT) < 2)
         {
-            this.position.x += this.speed.x * DT;
-            this.position.y += this.speed.y * DT;
-            this.speed.x += this.accel.x * DT;
-            this.speed.y += this.accel.y * DT;
+            this.position.x += this.speed.x * this.DT;
+            this.position.y += this.speed.y * this.DT;
+            this.speed.x += this.accel.x * this.DT;
+            this.speed.y += this.accel.y * this.DT;
         }
 
-        this.speed.x *= SPEEDDECREASING;
-        this.accel.x *= SPEEDDECREASING;
+        this.speed.x *= this.SPEEDDECREASING;
+        this.accel.x *= this.SPEEDDECREASING;
 
         if (this.onFloor) {
             const FACTORONFLOOR = 0.2;
-            this.speed.y *= FACTORONFLOOR * SPEEDDECREASING;
-            this.accel.y += FACTORONFLOOR * GRAVITYSPEED;
-            this.accel.y = Math.min(FACTORONFLOOR * GRAVITY, this.accel.y);
+            this.speed.y *= FACTORONFLOOR * this.SPEEDDECREASING;
+            this.accel.y += FACTORONFLOOR * this.GRAVITYSPEED;
+            this.accel.y = Math.min(FACTORONFLOOR * this.GRAVITY, this.accel.y);
         }
         else {
-            this.speed.y *= SPEEDDECREASING;
-            this.accel.y += GRAVITYSPEED;
-            this.accel.y = Math.min(GRAVITY, this.accel.y);
+            this.speed.y *= this.SPEEDDECREASING;
+            this.accel.y += this.GRAVITYSPEED;
+            this.accel.y = Math.min(this.GRAVITY, this.accel.y);
         }
 
 
