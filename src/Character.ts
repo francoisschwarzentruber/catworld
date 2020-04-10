@@ -1,5 +1,6 @@
 import { PhysicalObject } from './PhysicalObject.js';
 import { Vector2D } from './Vector2D.js';
+import { Sound } from './Sound.js';
 
 export class Character extends PhysicalObject {
     public direction: Vector2D = { x: 1, y: 0 };
@@ -28,6 +29,7 @@ export class Character extends PhysicalObject {
     jump() {
         console.log("jump");
         if (this.onFloor) {
+            Sound.play("jump");
             this.countJump = 1;
             this.forceJump();
         }

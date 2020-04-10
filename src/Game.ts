@@ -17,7 +17,7 @@ export class Game {
     private hearts = [];
     private clippingFactor = 0;
     private win: boolean = false;
-    private hurt = false;
+    private hurt = 0;
 
     constructor(canvas: HTMLCanvasElement, name: string) {
         Music.play("music");
@@ -62,14 +62,21 @@ export class Game {
 
 
     logic() {
-         for (let character of this.characters) {
-             if (character.name == "white_collar")
-                 if (PhysicalObject.intersect(this.dede, character)) {
-                     this.hurt = true;
-                     setTimeout(() => {this.hurt = false}, 1000);
-                     break;
-                 }
-         }
+        if (this.hurt > 0) {
+            this.hurt++;
+            if (this.hurt > 30)
+                this.hurt = 0;
+        }
+
+
+
+        for (let character of this.characters) {
+            if (character.name == "white_collar")
+                if (PhysicalObject.intersect(this.dede, character)) {
+                    this.hurt = 1;
+                    break;
+                }
+        }
 
         for (let heart of this.hearts) {
             for (let character of this.characters)
@@ -147,8 +154,10 @@ export class Game {
                 this.clippingFactor = 1;
         }
 
-        if(this.hurt)
-            context.filter = 'blur(4px)';
+        if (this.hurt > 0)
+            context.filter = 'blur(4px)'
+        else
+            context.filter = "none";
         context.drawImage(this.imgBackground, this.dede.position.x / 2 - 320, 0);
 
 
