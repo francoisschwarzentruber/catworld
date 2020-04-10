@@ -2,6 +2,9 @@ import { PhysicalObject } from './PhysicalObject.js';
 import { Scene } from './Scene.js';
 import { Heart } from './Heart.js';
 import { Character } from './Character.js';
+import { Music } from './Music.js';
+import { NPC } from './NPC.js';
+import { Sound } from './Sound.js';
 
 
 export class Game {
@@ -12,13 +15,17 @@ export class Game {
     private lastLoop: Date = new Date();
     private characters = [];
     private hearts = [];
+    private clippingFactor = 0;
+    private win: boolean = false;
 
     constructor(canvas: HTMLCanvasElement, name: string) {
+        Music.play("music");
         this.canvas = canvas;
         this.scene = new Scene(name);
-        this.dede = new Character("cat", 48, { x: 200, y: 50 });
-        for (let i = 0; i < 50; i++)
-            this.characters.push(new Character("white_collar", 48, { x: Math.random() * 2000, y: 100 }));
+        this.dede = new Character("cat", 48, { x: 200, y: this.scene.height/2 });
+        //this.dede = new Character("cat", 48, { x: 2800, y: 200 });
+        for (let i = 0; i < 20; i++)
+            this.characters.push(new NPC("white_collar", 48, { x: Math.random() * 3500, y: 200 }));
 
         this.imgBackground.src = "./" + name + "_background.png";
         // this.imgBackground.src = "./fond_coeur.png";
@@ -31,7 +38,8 @@ export class Game {
         const infoPosition = this.scene.getGoodPositionScore(character);
         character.onFloor = infoPosition.onFloor;
 
-        character.angle = infoPosition.angle;
+        if (character.onFloor)
+            character.angle = infoPosition.angle;
 
         character.position.x += infoPosition.x;
         character.position.y += infoPosition.y;
@@ -53,25 +61,25 @@ export class Game {
 
 
     logic() {
-        for (let character of this.characters) {
-            if (character.name == "white_collar")
-                if (Math.abs(this.dede.position.x - character.position.x) < 32 &&
-                    Math.abs((this.dede.position.y - 48) - character.position.y) < 60 &&
-                    this.dede.isFalling()) {
-                    console.log("un white_collar doit mourir");
-                    this.characters.push(new Character("gauchiste", 48, character.position));
-                    this.removeCharacter(character);
-                    this.dede.forceJump();
-                    break;
-                }
-        }
+        /* for (let character of this.characters) {
+             if (character.name == "white_collar")
+                 if (Math.abs(this.dede.position.x - character.position.x) < 32 &&
+                     Math.abs((this.dede.position.y - 48) - character.position.y) < 60 &&
+                     this.dede.isFalling()) {
+                     console.log("un white_collar doit mourir");
+                     this.characters.push(new Character("gauchiste", 48, character.position));
+                     this.removeCharacter(character);
+                     this.dede.forceJump();
+                     break;
+                 }
+         }*/
 
         for (let heart of this.hearts) {
             for (let character of this.characters)
                 if (character.name == "white_collar") {
                     if (PhysicalObject.intersect(heart, character)) {
                         console.log("un white_collar doit mourir");
-                        this.characters.push(new Character("gauchiste", 48, character.position));
+                        this.characters.push(new NPC("gauchiste", 48, character.position));
                         this.removeCharacter(character);
                         this.removeHeart(heart);
                     }
@@ -80,19 +88,39 @@ export class Game {
 
 
 
-
+        if (this.dede.position.x + this.dede.size > this.scene.width - 3 && !this.win) {
+            this.win = true;
+            Music.stop();
+        }
+            
 
     }
 
+
+
+    drawClippingThatsAllFolks(context) {
+        if(this.clippingFactor < 0) this.clippingFactor = 0;
+        if (this.clippingFactor < 1) {
+            context.save();
+            context.beginPath();
+            context.arc(this.dede.position.x, this.dede.position.y, this.clippingFactor * 400, 0, Math.PI * 2);
+            context.clip();
+        }
+    }
+
+
+
     draw() {
+        if (!this.win) {
+            this.liveCharacter(this.dede);
+            for (let character of this.characters)
+                this.liveCharacter(character);
 
-        this.liveCharacter(this.dede);
-        for (let character of this.characters)
-            this.liveCharacter(character);
+            for (let heart of this.hearts)
+                heart.live();
+            this.logic();
+        }
 
-        for (let heart of this.hearts)
-            heart.live();
-        this.logic();
 
         let camera = { x: this.dede.position.x - 640 / 4, y: this.dede.position.y - 480 / 4 };
         if (camera.x < 0) camera.x = 0;
@@ -106,15 +134,22 @@ export class Game {
         context.clearRect(0, 0, 640, 480);
 
         context.resetTransform();
-        context.translate(-camera.x, -camera.y * 2);
-        context.scale(2, 2);
-
-        context.drawImage(this.imgBackground, 0, 0);
-
-
-        context.resetTransform();
         context.translate(-camera.x * 2, -camera.y * 2);
         context.scale(2, 2);
+
+        this.drawClippingThatsAllFolks(context);
+
+        if (this.win) {
+            this.clippingFactor -= 0.01;
+        }
+        else {
+            this.clippingFactor += 0.01;
+            if (this.clippingFactor > 1)
+                this.clippingFactor = 1;
+        }
+
+        context.drawImage(this.imgBackground, this.dede.position.x / 2 - 320, 0);
+
 
         this.scene.draw(context);
 
@@ -126,7 +161,7 @@ export class Game {
 
         this.dede.draw(context);
 
-
+        context.restore();
         context.resetTransform();
         context.strokeStyle = "#000000";
         context.font = "20px Georgia";
@@ -154,7 +189,7 @@ export class Game {
     }
 
     action() {
-
+        Sound.play("heartlaunch");
         this.hearts.push(new Heart(this.dede.position, this.dede.direction));
     }
 }

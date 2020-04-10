@@ -56,17 +56,21 @@ export class Scene {
         // this.dataPixel = this.context.getImageData(0, 0, this.img.width, this.img.height).data;
 
 
+        if(obj.position.x - obj.size/2< 0)
+            obj.position.x = obj.size/2;
 
 
         let isObstacle = (x, y) => {
-            return this.getPixel(x + obj.position.x, y + obj.position.y) < 32;
+            return this.getPixel(x + obj.position.x, y + obj.position.y) < 64;
         }
 
 
         let getFloorLevel = (ix) => {
-            for (let iy = -obj.size / 2; iy < obj.size / 2; iy++) {
-                const localXY = Vector2DUtility.rotate({ x: ix, y: iy }, obj.angle);
-                const localXYD = Vector2DUtility.rotate({ x: ix, y: iy - 1 }, obj.angle);
+            let SIZE = obj.size;
+            for (let iy = 0; iy < SIZE; iy++) {
+                const localXY = { x: ix, y: iy };// Vector2DUtility.rotate({ x: ix, y: iy }, obj.angle);
+                const localXYD = { x: ix, y: iy-1 };//Vector2DUtility.rotate({ x: ix, y: iy - 1 }, obj.angle);
+
                 if (isObstacle(localXY.x, localXY.y) && !isObstacle(localXYD.x, localXYD.y)) {
                     return iy;
 
@@ -75,44 +79,56 @@ export class Scene {
             return undefined;
         }
 
-        const SIZE = obj.size;
-        const FACTOR = SIZE * SIZE;
+        const SIZEX = obj.size * 0.75;
+        const SIZEY = obj.size;
+
+        const FACTORY = 1/160;//(SIZEY*SIZEY);
+        const FACTORX = 1/80;//SIZEY*SIZEY;
 
         let v = { x: 0, y: 0, onFloor: false, angle: 0.0 };
-        for (let ix = -SIZE / 2; ix < SIZE / 2; ix++)
-            for (let iy = -SIZE / 2; iy < SIZE / 2; iy++) {
-                const localXY = Vector2DUtility.rotate({ x: ix, y: iy }, obj.angle);
-                //let localXY = { x: ix, y: iy };
+        for (let ix = -SIZEX / 2; ix < SIZEX / 2; ix++)
+            for (let iy = -SIZEY * 0.2; iy < SIZEY / 2; iy++) {
+                //const localXY = Vector2DUtility.rotate({ x: ix, y: iy }, obj.angle);
+                let localXY = { x: ix, y: iy };
                 if (isObstacle(localXY.x, localXY.y)) {
                     let xw = 1;//-Math.abs(x)/(SIZE/2);
                     let yw = 1;//-Math.abs(y)/(SIZE/2);
-                    v.x += -ix * xw;
+                    if (iy < 0) v.x += -ix * xw;
 
-                    if (iy < SIZE / 2 - 2) v.y += -iy * yw;
+                    yw =  0.5*(SIZEY/2-Math.abs(iy))/(SIZEY/2);
+
+                   if (iy < SIZEY / 2 - 2) v.y += -iy * yw;// * (SIZEY/2-Math.abs(iy))/(SIZEY/2);
+
+                    //if (iy < SIZEY / 2 - 2) v.y += -iy * yw;
                 }
             }
 
-        v.x /= FACTOR;
-        v.y /= FACTOR;
 
-        let y1 = getFloorLevel(-obj.size / 2);
-        let y2 = getFloorLevel(obj.size / 2);
+        let y1 = getFloorLevel(-obj.size / 4);
+        let y2 = getFloorLevel(obj.size / 4);
 
+        const MAXANGLE = 0.3;
         if ((y1 != undefined) && (y2 != undefined)) {
-            v.angle = obj.angle + Math.atan2(y2 - y1, obj.size);
-        }
+            v.angle = Math.atan2(y2 - y1, obj.size);
+
+            if(y1 < SIZEY/2 && y2 < SIZEY/2)
+                obj.position.y-=(SIZEY/2-Math.max(y1, y2)*Math.cos(v.angle)-2);
+
+            v.angle = Math.min(v.angle, MAXANGLE);
+            v.angle = Math.max(v.angle, -MAXANGLE);
+        }/*
         else if (y1 != undefined)
             v.angle = obj.angle + 0.05;
         else if (y2 != undefined)
-            v.angle = obj.angle - 0.05;
+            v.angle = obj.angle - 0.05;*/
         else {
             v.angle = 0;
         }
 
 
-        let v2 = Vector2DUtility.rotate(v, -obj.angle);
-        v.x = v2.x;
-        v.y = v2.y;
+        let v2 = v;//Vector2DUtility.rotate(v, -obj.angle);
+        v.x = v2.x *= FACTORX;
+        v.y = v2.y *= FACTORY;
 
         v.onFloor = (v.y < 0);// && (y1 != undefined) && (y2 != undefined);
 

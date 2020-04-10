@@ -8,7 +8,7 @@ let keyBoardKeys = [];
 
 function load() {
     let canvas: HTMLCanvasElement = <HTMLCanvasElement>document.getElementById("canvas");
-    let g = new Game(canvas, "karine");
+    let g = new Game(canvas, new URL(window.location.href).searchParams.get("id"));
 
     function handleKeys() {
         if (keyBoardKeys[37]) console.log("left");
