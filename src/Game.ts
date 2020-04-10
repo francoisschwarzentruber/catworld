@@ -155,7 +155,7 @@ export class Game {
         }
 
         if (this.hurt > 0)
-            context.filter = 'blur(4px)'
+            context.filter = 'grayscale(1.0)'
         else
             context.filter = "none";
         context.drawImage(this.imgBackground, this.dede.position.x / 2 - 320, 0);
