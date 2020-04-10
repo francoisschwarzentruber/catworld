@@ -10,7 +10,6 @@ function load() {
     let canvas: HTMLCanvasElement = <HTMLCanvasElement>document.getElementById("canvas");
     let g = new Game(canvas, "karine");
 
-
     function handleKeys() {
         if (keyBoardKeys[37]) console.log("left");
         if (keyBoardKeys[37]) g.left();
@@ -19,9 +18,11 @@ function load() {
     }
 
     function handleGamePad(gamePad: Gamepad) {
-        if (gamePad.buttons[1].pressed) g.up();
+
         if (gamePad.axes[6] < 0) g.left();
         if (gamePad.axes[6] > 0) g.right();
+        if (gamePad.buttons[1].pressed) g.up();
+        if (gamePad.buttons[0].pressed) g.action();
     }
 
     (function animloop() {
@@ -31,7 +32,10 @@ function load() {
         g.draw();
 
         //should be outside animLoop, but when outside, it does not work
-        window.onkeydown = function (evt: KeyboardEvent) { keyBoardKeys[evt.keyCode] = evt.keyCode; console.log(evt.keyCode) }
+        window.onkeydown = function (evt: KeyboardEvent) {
+        keyBoardKeys[evt.keyCode] = evt.keyCode;
+            if (evt.keyCode == 32) g.action();
+        }
         window.onkeyup = function (evt: KeyboardEvent) { keyBoardKeys[evt.keyCode] = false; console.log(evt.keyCode) }
 
 

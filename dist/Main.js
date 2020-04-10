@@ -15,12 +15,14 @@ function load() {
             g.up();
     }
     function handleGamePad(gamePad) {
-        if (gamePad.buttons[1].pressed)
-            g.up();
         if (gamePad.axes[6] < 0)
             g.left();
         if (gamePad.axes[6] > 0)
             g.right();
+        if (gamePad.buttons[1].pressed)
+            g.up();
+        if (gamePad.buttons[0].pressed)
+            g.action();
     }
     (function animloop() {
         window.requestAnimationFrame(animloop);
@@ -28,7 +30,11 @@ function load() {
         gamePadHandler(handleGamePad);
         g.draw();
         //should be outside animLoop, but when outside, it does not work
-        window.onkeydown = function (evt) { keyBoardKeys[evt.keyCode] = evt.keyCode; console.log(evt.keyCode); };
+        window.onkeydown = function (evt) {
+            keyBoardKeys[evt.keyCode] = evt.keyCode;
+            if (evt.keyCode == 32)
+                g.action();
+        };
         window.onkeyup = function (evt) { keyBoardKeys[evt.keyCode] = false; console.log(evt.keyCode); };
     })();
 }
