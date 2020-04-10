@@ -14,9 +14,11 @@ export class Character extends PhysicalObject {
 
         if (name == "cat") {
             this.imgMovementLeft.push(ImageLoader.get("cat_left_1"));
+            this.imgMovementLeft.push(ImageLoader.get("cat_left"));
             this.imgMovementLeft.push(ImageLoader.get("cat_left_2"));
 
             this.imgMovementRight.push(ImageLoader.get("cat_right_1"));
+            this.imgMovementRight.push(ImageLoader.get("cat_right"));
             this.imgMovementRight.push(ImageLoader.get("cat_right_2"));
         }
     }
@@ -75,24 +77,29 @@ export class Character extends PhysicalObject {
                 this.angle = 0;
         }
 
+
+
+        let iMovementIndex = Math.round(this.iMovement / 3) % 3;
+        if(iMovementIndex < 2)
+          console.log(iMovementIndex)
         if (this.direction.x < 0) {
             this.img = this.imgLeft;
-            if (this.speed.x < 1 && this.imgMovementLeft.length > 0)
-                this.img = this.imgMovementLeft[this.iMovement % 2];
+            if (this.speed.x < -1 && this.imgMovementLeft.length > 0)
+                this.img = this.imgMovementLeft[iMovementIndex];
 
             if (this.speed.x > 1 && this.imgMovementLeft.length > 0)
-                this.img = this.imgMovementLeft[this.iMovement % 2];
+                this.img = this.imgMovementLeft[iMovementIndex];
         }
         else {
             this.img = this.imgRight;
-            if (this.speed.x < 1 && this.imgMovementRight.length > 0)
-                this.img = this.imgMovementRight[this.iMovement % 2];
+            if (this.speed.x < -1 && this.imgMovementRight.length > 0)
+                this.img = this.imgMovementRight[iMovementIndex];
 
             if (this.speed.x > 1 && this.imgMovementRight.length > 0)
-                this.img = this.imgMovementRight[this.iMovement % 2];
+                this.img = this.imgMovementRight[iMovementIndex];
         }
 
-        (this.speed.y > 0) ? this.img : this.imgJump
+//        (this.speed.y > 0) ? this.img : this.imgJump
 
     }
 
