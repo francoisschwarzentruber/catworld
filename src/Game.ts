@@ -17,12 +17,13 @@ export class Game {
     private hearts = [];
     private clippingFactor = 0;
     private win: boolean = false;
+    private hurt = false;
 
     constructor(canvas: HTMLCanvasElement, name: string) {
         Music.play("music");
         this.canvas = canvas;
         this.scene = new Scene(name);
-        this.dede = new Character("cat", 48, { x: 200, y: this.scene.height/2 });
+        this.dede = new Character("cat", 48, { x: 200, y: this.scene.height / 2 });
         //this.dede = new Character("cat", 48, { x: 2800, y: 200 });
         for (let i = 0; i < 20; i++)
             this.characters.push(new NPC("white_collar", 48, { x: Math.random() * 3500, y: 200 }));
@@ -61,18 +62,14 @@ export class Game {
 
 
     logic() {
-        /* for (let character of this.characters) {
+         for (let character of this.characters) {
              if (character.name == "white_collar")
-                 if (Math.abs(this.dede.position.x - character.position.x) < 32 &&
-                     Math.abs((this.dede.position.y - 48) - character.position.y) < 60 &&
-                     this.dede.isFalling()) {
-                     console.log("un white_collar doit mourir");
-                     this.characters.push(new Character("gauchiste", 48, character.position));
-                     this.removeCharacter(character);
-                     this.dede.forceJump();
+                 if (PhysicalObject.intersect(this.dede, character)) {
+                     this.hurt = true;
+                     setTimeout(() => {this.hurt = false}, 1000);
                      break;
                  }
-         }*/
+         }
 
         for (let heart of this.hearts) {
             for (let character of this.characters)
@@ -92,14 +89,14 @@ export class Game {
             this.win = true;
             Music.stop();
         }
-            
+
 
     }
 
 
 
     drawClippingThatsAllFolks(context) {
-        if(this.clippingFactor < 0) this.clippingFactor = 0;
+        if (this.clippingFactor < 0) this.clippingFactor = 0;
         if (this.clippingFactor < 1) {
             context.save();
             context.beginPath();
@@ -141,6 +138,8 @@ export class Game {
 
         if (this.win) {
             this.clippingFactor -= 0.01;
+            if (this.clippingFactor < 0.1)
+                document.location.href = "index.html";
         }
         else {
             this.clippingFactor += 0.01;
@@ -148,6 +147,8 @@ export class Game {
                 this.clippingFactor = 1;
         }
 
+        if(this.hurt)
+            context.filter = 'blur(4px)';
         context.drawImage(this.imgBackground, this.dede.position.x / 2 - 320, 0);
 
 
