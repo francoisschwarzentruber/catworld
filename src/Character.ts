@@ -1,27 +1,47 @@
 import { PhysicalObject } from './PhysicalObject.js';
 import { Vector2D } from './Vector2D.js';
 import { Sound } from './Sound.js';
+import { ImageLoader } from './ImageLoader.js';
 
 export class Character extends PhysicalObject {
     public direction: Vector2D = { x: 1, y: 0 };
+
+    imgMovementLeft = [];
+    imgMovementRight = [];
+
+    constructor(public readonly name: string, public readonly size: number, position: Vector2D) {
+        super(name, size, position);
+
+        if (name == "cat") {
+            this.imgMovementLeft.push(ImageLoader.get("cat_left_1"));
+            this.imgMovementLeft.push(ImageLoader.get("cat_left_2"));
+
+            this.imgMovementRight.push(ImageLoader.get("cat_right_1"));
+            this.imgMovementRight.push(ImageLoader.get("cat_right_2"));
+        }
+    }
 
     MOVEMENT = 10;
     JUMP = 40;
     countJump = 0;
 
+    iMovement = 0;
+
 
     left() {
-        this.img = this.imgLeft;
+
         this.imgJump = this.imgJumpLeft;
         this.accel.x -= this.MOVEMENT;
         this.direction = { x: -1, y: 0 };
+        this.iMovement++;
         //  this.position.x -= 5;
     }
     right() {
-        this.img = this.imgRight;
+
         this.imgJump = this.imgJumpRight;
         this.accel.x += this.MOVEMENT;
         this.direction = { x: 1, y: 0 };
+        this.iMovement++;
         //this.position.x += 5;
     }
 
@@ -55,6 +75,24 @@ export class Character extends PhysicalObject {
                 this.angle = 0;
         }
 
+        if (this.direction.x < 0) {
+            this.img = this.imgLeft;
+            if (this.speed.x < 1 && this.imgMovementLeft.length > 0)
+                this.img = this.imgMovementLeft[this.iMovement % 2];
+
+            if (this.speed.x > 1 && this.imgMovementLeft.length > 0)
+                this.img = this.imgMovementLeft[this.iMovement % 2];
+        }
+        else {
+            this.img = this.imgRight;
+            if (this.speed.x < 1 && this.imgMovementRight.length > 0)
+                this.img = this.imgMovementRight[this.iMovement % 2];
+
+            if (this.speed.x > 1 && this.imgMovementRight.length > 0)
+                this.img = this.imgMovementRight[this.iMovement % 2];
+        }
+
+        (this.speed.y > 0) ? this.img : this.imgJump
 
     }
 

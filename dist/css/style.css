@@ -11,3 +11,12 @@ html, body {
     margin: 0px;
     padding: 0px;
 }
+
+
+
+a img {
+    width: 300px;
+    padding: 12px;
+    margin: 20px;
+    border: 1px solid;
+}

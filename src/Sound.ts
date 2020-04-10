@@ -7,6 +7,7 @@ export class Sound {
     }
 
     static play(filename) {
+        console.log("play " + filename);
         if (!Sound.audios[filename])
             this.addAudio(filename);
         if (Sound.audios[filename]) Sound.audios[filename].play();

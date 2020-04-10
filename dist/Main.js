@@ -6,9 +6,8 @@ function load() {
     var g = new Game(canvas, new URL(window.location.href).searchParams.get("id"));
     function handleKeys() {
         if (keyBoardKeys[37])
-            console.log("left");
-        if (keyBoardKeys[37])
-            g.left();
+            if (keyBoardKeys[37])
+                g.left();
         if (keyBoardKeys[39])
             g.right();
         if (keyBoardKeys[38])
@@ -35,7 +34,7 @@ function load() {
             if (evt.keyCode == 32)
                 g.action();
         };
-        window.onkeyup = function (evt) { keyBoardKeys[evt.keyCode] = false; console.log(evt.keyCode); };
+        window.onkeyup = function (evt) { keyBoardKeys[evt.keyCode] = false; };
     })();
 }
 window.onload = load;

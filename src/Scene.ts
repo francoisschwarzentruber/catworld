@@ -40,7 +40,9 @@ export class Scene {
 
     getPixel(x, y) {
         let i = (Math.round(y) * this.img.width + Math.round(x)) * 4;
+        // if(this.dataPixel)
         return this.dataPixel[i];
+        //return 255;
     }
 
     draw(context) {
@@ -56,8 +58,8 @@ export class Scene {
         // this.dataPixel = this.context.getImageData(0, 0, this.img.width, this.img.height).data;
 
 
-        if(obj.position.x - obj.size/2< 0)
-            obj.position.x = obj.size/2;
+        if (obj.position.x - obj.size / 2 < 0)
+            obj.position.x = obj.size / 2;
 
 
         let isObstacle = (x, y) => {
@@ -66,10 +68,10 @@ export class Scene {
 
 
         let getFloorLevel = (ix) => {
-            let SIZE = obj.size;
+            let SIZE = obj.size * 1.5;
             for (let iy = 0; iy < SIZE; iy++) {
                 const localXY = { x: ix, y: iy };// Vector2DUtility.rotate({ x: ix, y: iy }, obj.angle);
-                const localXYD = { x: ix, y: iy-1 };//Vector2DUtility.rotate({ x: ix, y: iy - 1 }, obj.angle);
+                const localXYD = { x: ix, y: iy - 1 };//Vector2DUtility.rotate({ x: ix, y: iy - 1 }, obj.angle);
 
                 if (isObstacle(localXY.x, localXY.y) && !isObstacle(localXYD.x, localXYD.y)) {
                     return iy;
@@ -82,8 +84,8 @@ export class Scene {
         const SIZEX = obj.size * 0.75;
         const SIZEY = obj.size;
 
-        const FACTORY = 1/160;//(SIZEY*SIZEY);
-        const FACTORX = 1/80;//SIZEY*SIZEY;
+        const FACTORY = 1 / 160;//(SIZEY*SIZEY);
+        const FACTORX = 1 / 80;//SIZEY*SIZEY;
 
         let v = { x: 0, y: 0, onFloor: false, angle: 0.0 };
         for (let ix = -SIZEX / 2; ix < SIZEX / 2; ix++)
@@ -95,9 +97,9 @@ export class Scene {
                     let yw = 1;//-Math.abs(y)/(SIZE/2);
                     if (iy < 0) v.x += -ix * xw;
 
-                    yw =  0.5*(SIZEY/2-Math.abs(iy))/(SIZEY/2);
+                    yw = 0.5 * (SIZEY / 2 - Math.abs(iy)) / (SIZEY / 2);
 
-                   if (iy < SIZEY / 2 - 2) v.y += -iy * yw;// * (SIZEY/2-Math.abs(iy))/(SIZEY/2);
+                    if (iy < SIZEY / 2 - 2) v.y += -iy * yw;// * (SIZEY/2-Math.abs(iy))/(SIZEY/2);
 
                     //if (iy < SIZEY / 2 - 2) v.y += -iy * yw;
                 }
@@ -107,12 +109,12 @@ export class Scene {
         let y1 = getFloorLevel(-obj.size / 4);
         let y2 = getFloorLevel(obj.size / 4);
 
-        const MAXANGLE = 0.3;
+        const MAXANGLE = 1;
         if ((y1 != undefined) && (y2 != undefined)) {
             v.angle = Math.atan2(y2 - y1, obj.size);
 
-            if(y1 < SIZEY/2 && y2 < SIZEY/2)
-                obj.position.y-=(SIZEY/2-Math.max(y1, y2)*Math.cos(v.angle)-2);
+            if (y1 < SIZEY / 2 && y2 < SIZEY / 2)
+                obj.position.y -= (SIZEY / 2 - Math.max(y1, y2) * Math.cos(v.angle) - 2);
 
             v.angle = Math.min(v.angle, MAXANGLE);
             v.angle = Math.max(v.angle, -MAXANGLE);

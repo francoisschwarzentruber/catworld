@@ -76,7 +76,7 @@ export class PhysicalObject {
     draw(context: CanvasRenderingContext2D) {
         context.translate(this.position.x, this.position.y);
         context.rotate(this.angle);
-        context.drawImage((this.speed.y > 0) ? this.img : this.imgJump, - this.size / 2, - this.size / 2, this.size, this.size);
+        context.drawImage(this.img, - this.size / 2, - this.size / 2, this.size, this.size);
         context.rotate(-this.angle);
         context.translate(-this.position.x, -this.position.y);
     }

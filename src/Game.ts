@@ -24,12 +24,10 @@ export class Game {
         this.canvas = canvas;
         this.scene = new Scene(name);
         this.dede = new Character("cat", 48, { x: 200, y: this.scene.height / 2 });
-        //this.dede = new Character("cat", 48, { x: 2800, y: 200 });
-        for (let i = 0; i < 20; i++)
-            this.characters.push(new NPC("white_collar", 48, { x: Math.random() * 3500, y: 200 }));
+        for (let i = 0; i < 40; i++)
+            this.characters.push(new NPC("white_collar", 48, { x: 400 + Math.random() * 2500, y: 200 }));
 
         this.imgBackground.src = "./" + name + "_background.png";
-        // this.imgBackground.src = "./fond_coeur.png";
     }
 
 
@@ -94,6 +92,7 @@ export class Game {
 
         if (this.dede.position.x + this.dede.size > this.scene.width - 3 && !this.win) {
             this.win = true;
+            Sound.play("win");
             Music.stop();
         }
 
@@ -144,9 +143,12 @@ export class Game {
         this.drawClippingThatsAllFolks(context);
 
         if (this.win) {
-            this.clippingFactor -= 0.01;
-            if (this.clippingFactor < 0.1)
-                document.location.href = "index.html";
+            this.clippingFactor -= 0.02;
+            if (this.clippingFactor < 0.1) {
+                if (document.location.href != "index.html")
+                    document.location.href = "index.html";
+            }
+
         }
         else {
             this.clippingFactor += 0.01;
@@ -158,7 +160,8 @@ export class Game {
             context.filter = 'grayscale(1.0)'
         else
             context.filter = "none";
-        context.drawImage(this.imgBackground, this.dede.position.x / 2 - 320, 0);
+
+        context.drawImage(this.imgBackground, camera.x/2, camera.y/2);
 
 
         this.scene.draw(context);
