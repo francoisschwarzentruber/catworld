@@ -36,10 +36,10 @@ export class PhysicalObject {
         this.position = Vector2DUtility.copy(position);
         this.speed = { x: 0, y: 0 };
         this.accel = { x: 0, y: 0 };
-        this.img = this.imgRight;
         this.imgJump = this.imgJumpRight;
         this.imgLeft = ImageLoader.get(name + "_left");
         this.imgRight = ImageLoader.get(name + "_right");
+        this.img = this.imgRight;
     }
 
 
