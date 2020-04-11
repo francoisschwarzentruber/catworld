@@ -18,6 +18,8 @@ function load() {
     }
 
     function handleGamePad(gamePad: Gamepad) {
+        if(gamePad == null) return;
+        
         if (gamePad.axes) {
             if (gamePad.axes[6] < 0) g.left();
             if (gamePad.axes[6] > 0) g.right();
