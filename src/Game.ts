@@ -72,6 +72,7 @@ export class Game {
         for (let character of this.characters) {
             if (character.name == "white_collar")
                 if (PhysicalObject.intersect(this.dede, character)) {
+                    Sound.play("hurt");
                     this.hurt = 1;
                     break;
                 }
@@ -82,6 +83,7 @@ export class Game {
                 if (character.name == "white_collar") {
                     if (PhysicalObject.intersect(heart, character)) {
                         console.log("un white_collar doit mourir");
+                        Sound.play("oh");
                         this.characters.push(new NPC("gauchiste", 48, character.position));
                         this.removeCharacter(character);
                         this.removeHeart(heart);
