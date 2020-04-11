@@ -80,8 +80,6 @@ export class Character extends PhysicalObject {
 
 
         let iMovementIndex = Math.round(this.iMovement / 3) % 3;
-        if(iMovementIndex < 2)
-          console.log(iMovementIndex)
         if (this.direction.x < 0) {
             this.img = this.imgLeft;
             if (this.speed.x < -1 && this.imgMovementLeft.length > 0)

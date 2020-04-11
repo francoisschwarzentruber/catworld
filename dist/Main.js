@@ -1,6 +1,7 @@
 import { Game } from "./src/Game.js";
 import { gamePadHandler } from "./src/Gamepad.js";
 var keyBoardKeys = [];
+var fps, fpsInterval, startTime, now, then, elapsed;
 function load() {
     var canvas = document.getElementById("canvas");
     var g = new Game(canvas, new URL(window.location.href).searchParams.get("id"));
@@ -29,19 +30,36 @@ function load() {
                 g.action();
         }
     }
-    (function animloop() {
+    function animloop() {
         window.requestAnimationFrame(animloop);
-        handleKeys();
-        gamePadHandler(handleGamePad);
-        g.draw();
-        //should be outside animLoop, but when outside, it does not work
-        window.onkeydown = function (evt) {
-            keyBoardKeys[evt.keyCode] = evt.keyCode;
-            if (evt.keyCode == 32)
-                g.action();
-        };
-        window.onkeyup = function (evt) { keyBoardKeys[evt.keyCode] = false; };
-    })();
+        now = Date.now();
+        elapsed = now - then;
+        // if enough time has elapsed, draw the next frame
+        if (elapsed > fpsInterval) {
+            // Get ready for next frame by setting then=now, but also adjust for your
+            // specified fpsInterval not being a multiple of RAF's interval (16.7ms)
+            then = now - (elapsed % fpsInterval);
+            // Put your drawing code here
+            handleKeys();
+            gamePadHandler(handleGamePad);
+            g.draw();
+            //should be outside animLoop, but when outside, it does not work
+            window.onkeydown = function (evt) {
+                keyBoardKeys[evt.keyCode] = evt.keyCode;
+                if (evt.keyCode == 32)
+                    g.action();
+            };
+            window.onkeyup = function (evt) { keyBoardKeys[evt.keyCode] = false; };
+        }
+    }
+    ;
+    function startAnimating(fps) {
+        fpsInterval = 1000 / fps;
+        then = Date.now();
+        startTime = then;
+        animloop();
+    }
+    startAnimating(60);
 }
 window.onload = load;
 //# sourceMappingURL=Main.js.map
