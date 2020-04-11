@@ -3,6 +3,9 @@ import { gamePadHandler } from "./src/Gamepad.js";
 
 
 let keyBoardKeys = [];
+let fps, fpsInterval, startTime, now, then, elapsed;
+
+
 
 
 
@@ -18,8 +21,8 @@ function load() {
     }
 
     function handleGamePad(gamePad: Gamepad) {
-        if(gamePad == null) return;
-        
+        if (gamePad == null) return;
+
         if (gamePad.axes) {
             if (gamePad.axes[6] < 0) g.left();
             if (gamePad.axes[6] > 0) g.right();
@@ -32,23 +35,50 @@ function load() {
         }
     }
 
-    (function animloop() {
+
+
+
+    function animloop() {
         window.requestAnimationFrame(animloop);
-        handleKeys();
-        gamePadHandler(handleGamePad);
-        g.draw();
 
-        //should be outside animLoop, but when outside, it does not work
-        window.onkeydown = function (evt: KeyboardEvent) {
-            keyBoardKeys[evt.keyCode] = evt.keyCode;
-            if (evt.keyCode == 32) g.action();
+        now = Date.now();
+        elapsed = now - then;
+
+        // if enough time has elapsed, draw the next frame
+
+        if (elapsed > fpsInterval) {
+
+            // Get ready for next frame by setting then=now, but also adjust for your
+            // specified fpsInterval not being a multiple of RAF's interval (16.7ms)
+            then = now - (elapsed % fpsInterval);
+
+            // Put your drawing code here
+
+
+            handleKeys();
+            gamePadHandler(handleGamePad);
+            g.draw();
+
+            //should be outside animLoop, but when outside, it does not work
+            window.onkeydown = function (evt: KeyboardEvent) {
+                keyBoardKeys[evt.keyCode] = evt.keyCode;
+                if (evt.keyCode == 32) g.action();
+            }
+            window.onkeyup = function (evt: KeyboardEvent) { keyBoardKeys[evt.keyCode] = false; }
         }
-        window.onkeyup = function (evt: KeyboardEvent) { keyBoardKeys[evt.keyCode] = false; }
+
+    };
 
 
-    })();
+    function startAnimating(fps) {
+        fpsInterval = 1000 / fps;
+        then = Date.now();
+        startTime = then;
+        animloop();
+    }
 
 
+    startAnimating(60);
 }
 
 
