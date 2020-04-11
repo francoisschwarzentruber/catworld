@@ -1,4 +1,4 @@
-import { ImageLoader } from './ImageLoader';
+import { ImageLoader } from './ImageLoader.js';
 import { Vector2D, Vector2DUtility } from './Vector2D.js';
 
 
@@ -8,10 +8,9 @@ export class Scene {
     private dataPixel: Uint8ClampedArray;
 
     constructor(name) {
-        this.img = new Image();
-        // this.img.src = "./scenetest.png";
-        this.img = ImageLoader.get(name + "_scene.png");
-        this.img.onload = () => {
+        this.img = ImageLoader.get(name + "_scene", 
+        () => {
+            console.log("loading scene...")
             let canvas = document.createElement('canvas');
             canvas.width = this.img.width;
             canvas.height = this.img.height;
@@ -27,7 +26,7 @@ export class Scene {
                     console.log(i);
                     return;
                 }
-        }
+        });
 
     }
 
