@@ -14,6 +14,8 @@ function load() {
             g.up();
     }
     function handleGamePad(gamePad) {
+        if (gamePad == null)
+            return;
         if (gamePad.axes) {
             if (gamePad.axes[6] < 0)
                 g.left();
