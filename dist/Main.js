@@ -14,14 +14,18 @@ function load() {
             g.up();
     }
     function handleGamePad(gamePad) {
-        if (gamePad.axes[6] < 0)
-            g.left();
-        if (gamePad.axes[6] > 0)
-            g.right();
-        if (gamePad.buttons[1].pressed)
-            g.up();
-        if (gamePad.buttons[0].pressed)
-            g.action();
+        if (gamePad.axes) {
+            if (gamePad.axes[6] < 0)
+                g.left();
+            if (gamePad.axes[6] > 0)
+                g.right();
+        }
+        if (gamePad.buttons) {
+            if (gamePad.buttons[1].pressed)
+                g.up();
+            if (gamePad.buttons[0].pressed)
+                g.action();
+        }
     }
     (function animloop() {
         window.requestAnimationFrame(animloop);

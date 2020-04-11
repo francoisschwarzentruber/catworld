@@ -7,6 +7,7 @@ export class Music {
     static addAudio(filename) {
         Music.audios[filename] = new Audio(filename + ".ogg");
         Music.audios[filename].volume = 0.1;
+        Music.audios[filename].oncanplay = () => {if(filename == this.currentMusic) Music.audios[filename].play();}
     }
 
 

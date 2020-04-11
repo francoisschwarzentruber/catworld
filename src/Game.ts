@@ -143,10 +143,9 @@ export class Game {
         this.drawClippingThatsAllFolks(context);
 
         if (this.win) {
-            this.clippingFactor -= 0.02;
+            this.clippingFactor -= 0.01;
             if (this.clippingFactor < 0.1) {
-                if (document.location.href != "index.html")
-                    document.location.href = "index.html";
+                GOTOURL.goto("index.html");
             }
 
         }
@@ -161,7 +160,7 @@ export class Game {
         else
             context.filter = "none";
 
-        context.drawImage(this.imgBackground, camera.x/2, camera.y/2);
+        context.drawImage(this.imgBackground, camera.x / 2, camera.y / 2);
 
 
         this.scene.draw(context);
@@ -204,5 +203,22 @@ export class Game {
     action() {
         Sound.play("heartlaunch");
         this.hearts.push(new Heart(this.dede.position, this.dede.direction));
+    }
+}
+
+
+
+
+
+
+
+
+class GOTOURL {
+    static url = undefined;
+
+    static goto(url) {
+        if (this.url != url)
+            document.location.href = url;
+        this.url = url;
     }
 }
