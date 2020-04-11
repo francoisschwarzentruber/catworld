@@ -59,7 +59,7 @@ function load() {
         startTime = then;
         animloop();
     }
-    startAnimating(60);
+    startAnimating(30);
 }
 window.onload = load;
 //# sourceMappingURL=Main.js.map

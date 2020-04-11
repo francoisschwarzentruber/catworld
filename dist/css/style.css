@@ -11,6 +11,7 @@ html, body {
     padding: 0px;
     text-align: center;
     background-color: black;
+    color: white;
 }
 
 
@@ -20,4 +21,5 @@ a img {
     padding: 12px;
     margin: 20px;
     border: 1px solid;
+    background-color: white;
 }

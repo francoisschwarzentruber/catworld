@@ -78,7 +78,7 @@ function load() {
     }
 
 
-    startAnimating(60);
+    startAnimating(30);
 }
 
 
