@@ -117,6 +117,8 @@ export class Game {
 
 
     draw() {
+        if (!ImageLoader.isAllLoaded()) return;
+
         if (!this.win) {
             this.liveCharacter(this.dede);
             for (let character of this.characters)
