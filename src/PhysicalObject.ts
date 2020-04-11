@@ -1,4 +1,5 @@
 import { Vector2D, Vector2DUtility } from './Vector2D.js';
+import { ImageLoader } from './ImageLoader.js';
 
 /*
 const SPEEDDECREASING = 0.5;
@@ -37,8 +38,8 @@ export class PhysicalObject {
         this.accel = { x: 0, y: 0 };
         this.img = this.imgRight;
         this.imgJump = this.imgJumpRight;
-        this.imgLeft.src = "./" + name + "_left.png";
-        this.imgRight.src = "./" + name + "_right.png";
+        this.imgLeft = ImageLoader.get(name + "_left");
+        this.imgRight = ImageLoader.get(name + "_right");
     }
 
 

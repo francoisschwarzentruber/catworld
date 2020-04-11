@@ -3,7 +3,7 @@ export class Sound {
     static audios = [];
 
     static  addAudio(filename) {
-        Sound.audios[filename] = new Audio(filename + ".ogg");
+        Sound.audios[filename] = new Audio("sounds/" + filename + ".ogg");
     }
 
     static play(filename) {

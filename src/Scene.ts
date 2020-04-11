@@ -1,3 +1,4 @@
+import { ImageLoader } from './ImageLoader';
 import { Vector2D, Vector2DUtility } from './Vector2D.js';
 
 
@@ -9,7 +10,7 @@ export class Scene {
     constructor(name) {
         this.img = new Image();
         // this.img.src = "./scenetest.png";
-        this.img.src = "./" + name + "_scene.png";
+        this.img = ImageLoader.get(name + "_scene.png");
         this.img.onload = () => {
             let canvas = document.createElement('canvas');
             canvas.width = this.img.width;

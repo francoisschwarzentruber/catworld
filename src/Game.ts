@@ -5,6 +5,7 @@ import { Character } from './Character.js';
 import { Music } from './Music.js';
 import { NPC } from './NPC.js';
 import { Sound } from './Sound.js';
+import { ImageLoader } from './ImageLoader.js';
 
 
 export class Game {
@@ -27,7 +28,7 @@ export class Game {
         for (let i = 0; i < 40; i++)
             this.characters.push(new NPC("white_collar", 48, { x: 400 + Math.random() * 2500, y: 200 }));
 
-        this.imgBackground.src = "./" + name + "_background.png";
+        this.imgBackground = ImageLoader.get(name + "_background.png");
     }
 
 
