@@ -15,7 +15,7 @@ export class Heart extends PhysicalObject {
             y: HEART_THROW_STRENGTH * direction.y + HEART_THROW_HEIGHT
         }
 
-
+        
         this.speed = Vector2DUtility.copy(direction);
         this.accel = Vector2DUtility.copy(direction);
     }
