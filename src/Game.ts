@@ -18,6 +18,7 @@ export class Game {
     private hearts = [];
     private clippingFactor = 0;
     private win: boolean = false;
+    private lost: boolean = false;
     private hurt = 0;
 
     constructor(canvas: HTMLCanvasElement, name: string) {
@@ -92,7 +93,11 @@ export class Game {
         }
 
 
-
+        if(this.dede.position.y > this.scene.height && !this.lost) {
+            this.lost = true;
+            Sound.play("gameover");
+            Music.stop();
+        }
         if (this.dede.position.x + this.dede.size > this.scene.width - 3 && !this.win) {
             this.win = true;
             Sound.play("win");
@@ -147,7 +152,7 @@ export class Game {
 
         this.drawClippingThatsAllFolks(context);
 
-        if (this.win) {
+        if (this.win || this.lost) {
             this.clippingFactor -= 0.01;
             if (this.clippingFactor < 0.1) {
                 GOTOURL.goto("index.html");
