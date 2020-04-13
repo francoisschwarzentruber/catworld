@@ -19,6 +19,7 @@ export class Game {
     private clippingFactor = 0;
     private win: boolean = false;
     private lost: boolean = false;
+    private lifepoints = 7;
     private hurt = 0;
 
     constructor(canvas: HTMLCanvasElement, name: string) {
@@ -93,7 +94,7 @@ export class Game {
         }
 
 
-        if(this.dede.position.y > this.scene.height && !this.lost) {
+        if (this.dede.position.y > this.scene.height && !this.lost) {
             this.lost = true;
             Sound.play("gameover");
             Music.stop();
@@ -188,6 +189,9 @@ export class Game {
         context.strokeStyle = "#000000";
         context.font = "20px Georgia";
 
+
+        for (let i = 0; i < this.lifepoints; i++)
+            context.drawImage(ImageLoader.get("lifepoint"), 16 * i, 0, 16, 16);
         /*     let thisLoop = new Date();
              context.strokeText((1000 / (<any>thisLoop - <any>this.lastLoop)).toString(), 0, 20);
      
