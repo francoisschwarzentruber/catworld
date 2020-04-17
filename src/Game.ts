@@ -8,6 +8,10 @@ import { Sound } from './Sound.js';
 import { ImageLoader } from './ImageLoader.js';
 
 
+const LIFEPOINT_SIZE = 32;
+const NUMBER_LIFEPOINTS = 3;
+
+
 export class Game {
     private canvas: HTMLCanvasElement;
     private dede: Character;
@@ -19,7 +23,7 @@ export class Game {
     private clippingFactor = 0;
     private win: boolean = false;
     private lost: boolean = false;
-    private lifepoints = 7;
+    private lifepoints = NUMBER_LIFEPOINTS;
     private hurt = 0;
 
     constructor(canvas: HTMLCanvasElement, name: string) {
@@ -70,10 +74,11 @@ export class Game {
         }
 
 
-
+        if(this.hurt == 0)
         for (let character of this.characters) {
             if (character.name == "white_collar")
                 if (PhysicalObject.intersect(this.dede, character)) {
+                    this.lifepoints--;
                     Sound.play("hurt");
                     this.hurt = 1;
                     break;
@@ -94,7 +99,7 @@ export class Game {
         }
 
 
-        if (this.dede.position.y > this.scene.height && !this.lost) {
+        if (((this.dede.position.y > this.scene.height) || this.lifepoints <= 0) && !this.lost) {
             this.lost = true;
             Sound.play("gameover");
             Music.stop();
@@ -125,7 +130,7 @@ export class Game {
     draw() {
         if (!ImageLoader.isAllLoaded()) return;
 
-        if (!this.win) {
+        if (!this.win && !this.lost) {
             this.liveCharacter(this.dede);
             for (let character of this.characters)
                 this.liveCharacter(character);
@@ -191,7 +196,7 @@ export class Game {
 
 
         for (let i = 0; i < this.lifepoints; i++)
-            context.drawImage(ImageLoader.get("lifepoint"), 16 * i, 0, 16, 16);
+            context.drawImage(ImageLoader.get("lifepoint"), LIFEPOINT_SIZE * i, 0, LIFEPOINT_SIZE, LIFEPOINT_SIZE);
         /*     let thisLoop = new Date();
              context.strokeText((1000 / (<any>thisLoop - <any>this.lastLoop)).toString(), 0, 20);
      

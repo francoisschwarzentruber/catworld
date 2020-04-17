@@ -72,7 +72,7 @@ export class Character extends PhysicalObject {
         else {
             if (this.countJump > 0) this.countJump++;
             if (this.countJump > 10)
-                this.angle += 0.3;
+                this.angle += 0.3 * this.direction.x;
             else
                 this.angle = 0;
         }

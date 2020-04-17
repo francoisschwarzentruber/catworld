@@ -8,25 +8,25 @@ export class Scene {
     private dataPixel: Uint8ClampedArray;
 
     constructor(name) {
-        this.img = ImageLoader.get(name + "_scene", 
-        () => {
-            console.log("loading scene...")
-            let canvas = document.createElement('canvas');
-            canvas.width = this.img.width;
-            canvas.height = this.img.height;
-            this.context = canvas.getContext('2d');
-            this.context.fillStyle = "#FFFFFF";
-            this.context.fillRect(0, 0, this.img.width, this.img.height);
-            this.context.imageSmoothingEnabled = false;
-            this.context.drawImage(this.img, 0, 0);
-            this.dataPixel = this.context.getImageData(0, 0, this.img.width, this.img.height).data;
+        this.img = ImageLoader.get(name + "_scene",
+            () => {
+                console.log("loading scene...")
+                let canvas = document.createElement('canvas');
+                canvas.width = this.img.width;
+                canvas.height = this.img.height;
+                this.context = canvas.getContext('2d');
+                this.context.fillStyle = "#FFFFFF";
+                this.context.fillRect(0, 0, this.img.width, this.img.height);
+                this.context.imageSmoothingEnabled = false;
+                this.context.drawImage(this.img, 0, 0);
+                this.dataPixel = this.context.getImageData(0, 0, this.img.width, this.img.height).data;
 
-            for (let i = 0; i < this.dataPixel.length; i++)
-                if (this.dataPixel[i] < 64) {
-                    console.log(i);
-                    return;
-                }
-        });
+                for (let i = 0; i < this.dataPixel.length; i++)
+                    if (this.dataPixel[i] < 64) {
+                        console.log(i);
+                        return;
+                    }
+            });
 
     }
 
@@ -97,9 +97,17 @@ export class Scene {
                     let yw = 1;//-Math.abs(y)/(SIZE/2);
                     if (iy < 0) v.x += -ix * xw;
 
-                    yw = 0.5 * (SIZEY / 2 - Math.abs(iy)) / (SIZEY / 2);
+                    
 
-                    if (iy < SIZEY / 2 - 2) v.y += -iy * yw;// * (SIZEY/2-Math.abs(iy))/(SIZEY/2);
+                    if (obj.speed.y < 0) {
+                        yw = 3 * (SIZEY / 2 - Math.abs(iy)) / (SIZEY / 2);
+                        v.y += -iy * yw;//
+                    }
+                    else {
+                        yw = 0.5 * (SIZEY / 2 - Math.abs(iy)) / (SIZEY / 2);
+                        if (iy < SIZEY / 2 - 2 && obj.speed.y > 0) v.y += -iy * yw;// * (SIZEY/2-Math.abs(iy))/(SIZEY/2);
+                    }
+                        
 
                     //if (iy < SIZEY / 2 - 2) v.y += -iy * yw;
                 }
@@ -113,7 +121,7 @@ export class Scene {
         if ((y1 != undefined) && (y2 != undefined)) {
             v.angle = Math.atan2(y2 - y1, obj.size);
 
-            if (y1 < SIZEY / 2 && y2 < SIZEY / 2)
+            if (y1 < SIZEY / 2 && y2 < SIZEY / 2 && obj.speed.y > 0)
                 obj.position.y -= (SIZEY / 2 - Math.max(y1, y2) * Math.cos(v.angle) - 2);
 
             v.angle = Math.min(v.angle, MAXANGLE);
