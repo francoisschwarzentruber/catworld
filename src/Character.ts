@@ -31,15 +31,14 @@ export class Character extends PhysicalObject {
 
 
     left() {
-
         this.imgJump = this.imgJumpLeft;
         this.accel.x -= this.MOVEMENT;
         this.direction = { x: -1, y: 0 };
         this.iMovement++;
         //  this.position.x -= 5;
     }
-    right() {
 
+    right() {
         this.imgJump = this.imgJumpRight;
         this.accel.x += this.MOVEMENT;
         this.direction = { x: 1, y: 0 };
@@ -97,7 +96,7 @@ export class Character extends PhysicalObject {
                 this.img = this.imgMovementRight[iMovementIndex];
         }
 
-//        (this.speed.y > 0) ? this.img : this.imgJump
+        //        (this.speed.y > 0) ? this.img : this.imgJump
 
     }
 

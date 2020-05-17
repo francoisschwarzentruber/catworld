@@ -1,35 +1,29 @@
 import { Character } from "./Character.js";
 
 export class NPC extends Character {
-
-
-
-    i = 0;
-    d = 0;
+    iTime = 0;
+    iDirection = 0;
 
 
     live() {
         super.live();
 
-        if (this.i == 0) {
+        if (this.iTime == 0) {
             if (Math.random() < 0.5)
-                this.d = 0;
+                this.iDirection = 0;
             if (Math.random() < 0.5)
-                this.d = 1;
+                this.iDirection = 1;
             if (Math.random() < 0.5)
-                this.d = -1;
+                this.iDirection = -1;
         }
-        this.i++;
+        this.iTime++;
 
-        if (this.i > 100 && Math.random() < 0.5) {
-            this.i = 0;
+        if (this.iTime > 100 && Math.random() < 0.5) {
+            this.iTime = 0;
         }
 
-
-
-        if (this.d < 0 && this.i % 2 == 0) this.left();
-
-        if (this.d > 0 && this.i % 2 == 0) this.right();
+        if (this.iDirection < 0 && this.iTime % 2 == 0) this.left();
+        if (this.iDirection > 0 && this.iTime % 2 == 0) this.right();
 
     }
 

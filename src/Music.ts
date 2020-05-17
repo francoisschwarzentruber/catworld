@@ -1,8 +1,8 @@
 export class Music {
 
-    static audios: HTMLAudioElement[] = [];
+    private static audios: HTMLAudioElement[] = [];
 
-    static currentMusic: string;
+    private static currentMusic: string;
 
     static addAudio(filename) {
         Music.audios[filename] = new Audio("music/" + filename + ".ogg");
@@ -19,7 +19,6 @@ export class Music {
     }
 
 
-
     static play(filename) {
         this.stop();
         if (!Music.audios[filename])
@@ -28,7 +27,4 @@ export class Music {
         console.log("music = " + filename)
         Music.currentMusic = filename;
     }
-
-
-
 }

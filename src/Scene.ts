@@ -1,52 +1,40 @@
-import { ImageLoader } from './ImageLoader.js';
-import { Vector2D, Vector2DUtility } from './Vector2D.js';
-
-
 export class Scene {
-    private img: HTMLImageElement;
+    private imgScene: HTMLImageElement;
     private context: CanvasRenderingContext2D;
     private dataPixel: Uint8ClampedArray;
 
     constructor(imgForeGround) {
-        this.img = imgForeGround;
+        this.imgScene = imgForeGround;
 
         console.log("loading scene...")
         let canvas = document.createElement('canvas');
-        canvas.width = this.img.width;
-        canvas.height = this.img.height;
+        canvas.width = this.imgScene.width;
+        canvas.height = this.imgScene.height;
         this.context = canvas.getContext('2d');
         this.context.fillStyle = "#FFFFFF";
-        this.context.fillRect(0, 0, this.img.width, this.img.height);
+        this.context.fillRect(0, 0, this.imgScene.width, this.imgScene.height);
         this.context.imageSmoothingEnabled = false;
-        this.context.drawImage(this.img, 0, 0);
-        this.dataPixel = this.context.getImageData(0, 0, this.img.width, this.img.height).data;
-
-        for (let i = 0; i < this.dataPixel.length; i++)
-            if (this.dataPixel[i] < 64) {
-                console.log(i);
-                return;
-            }
-
-
+        this.context.drawImage(this.imgScene, 0, 0);
+        this.dataPixel = this.context.getImageData(0, 0, this.imgScene.width, this.imgScene.height).data;
     }
 
     get width() {
-        return this.img.width;
+        return this.imgScene.width;
     }
 
     get height() {
-        return this.img.height;
+        return this.imgScene.height;
     }
 
     getPixel(x, y) {
-        let i = (Math.round(y) * this.img.width + Math.round(x)) * 4;
+        let i = (Math.round(y) * this.imgScene.width + Math.round(x)) * 4;
         // if(this.dataPixel)
         return this.dataPixel[i];
         //return 255;
     }
 
     draw(context) {
-        context.drawImage(this.img, 0, 0);
+        context.drawImage(this.imgScene, 0, 0);
     }
 
     /**
