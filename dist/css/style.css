@@ -15,6 +15,11 @@ html, body {
 }
 
 
+#titlescreen {
+    text-align: left;
+}
+
+
 
 a img {
     width: 300px;
@@ -24,6 +29,12 @@ a img {
     background-color: white;
 }
 
+
+input {
+    display: block;
+    padding: 16px;
+    background-color: cadetblue;
+}
 
 .hidden {
     display: none;
