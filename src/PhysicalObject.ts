@@ -30,6 +30,7 @@ export class PhysicalObject {
     protected imgJumpRight = this.imgRight;
     public onFloor: boolean = false;
     public angle = 0;
+    public dead: boolean;
 
 
     constructor(public readonly name: string, public readonly size: number, position: Vector2D) {
@@ -40,6 +41,7 @@ export class PhysicalObject {
         this.imgLeft = ImageLoader.get(name + "_left");
         this.imgRight = ImageLoader.get(name + "_right");
         this.img = this.imgRight;
+        this.dead = false;
     }
 
 

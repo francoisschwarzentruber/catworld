@@ -15,13 +15,15 @@ export class ImageLoader {
     static isAllLoaded() {
         if (this.allLoaded) return true;
 
-        for(let name in this.imgs) {
-            if(this.imgs[name].height == 0)
+        for (let name in this.imgs) {
+            if (this.imgs[name].height == 0)
                 return false;
         }
 
         this.allLoaded = true;
         return true;
     }
+
+
 
 }

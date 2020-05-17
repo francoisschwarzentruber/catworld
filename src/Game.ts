@@ -16,7 +16,7 @@ export class Game {
     private canvas: HTMLCanvasElement;
     private dede: Character;
     private scene: Scene;
-    private imgBackground = new Image();
+    private imgBackground = undefined;
     private lastLoop: Date = new Date();
     private characters = [];
     private hearts = [];
@@ -26,15 +26,15 @@ export class Game {
     private lifepoints = NUMBER_LIFEPOINTS;
     private hurt = 0;
 
-    constructor(canvas: HTMLCanvasElement, name: string) {
+    constructor(canvas: HTMLCanvasElement, imgForeGround, imgBackground) {
         Music.play("music");
         this.canvas = canvas;
-        this.scene = new Scene(name);
+        this.scene = new Scene(imgForeGround);
         this.dede = new Character("cat", 48, { x: 200, y: this.scene.height / 2 });
         for (let i = 0; i < 40; i++)
             this.characters.push(new NPC("white_collar", 48, { x: 400 + Math.random() * 2500, y: 200 }));
 
-        this.imgBackground = ImageLoader.get(name + "_background");
+        this.imgBackground = imgBackground;//ImageLoader.get(name + "_background");
     }
 
 
@@ -74,16 +74,24 @@ export class Game {
         }
 
 
-        if(this.hurt == 0)
-        for (let character of this.characters) {
-            if (character.name == "white_collar")
-                if (PhysicalObject.intersect(this.dede, character)) {
-                    this.lifepoints--;
-                    Sound.play("hurt");
-                    this.hurt = 1;
-                    break;
-                }
+        if (this.hurt == 0)
+            for (let character of this.characters) {
+                if (character.name == "white_collar")
+                    if (PhysicalObject.intersect(this.dede, character)) {
+                        this.lifepoints--;
+                        Sound.play("hurt");
+                        this.hurt = 1;
+                        break;
+                    }
+            }
+
+
+        for (let heart of this.hearts) {
+            if (heart.dead)
+                this.removeHeart(heart);
         }
+
+
 
         for (let heart of this.hearts) {
             for (let character of this.characters)
@@ -176,7 +184,8 @@ export class Game {
         else
             context.filter = "none";
 
-        context.drawImage(this.imgBackground, camera.x / 2, camera.y / 2);
+        if(this.imgBackground != undefined)
+            context.drawImage(this.imgBackground, camera.x / 2, camera.y / 2);
 
 
         this.scene.draw(context);

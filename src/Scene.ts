@@ -7,26 +7,26 @@ export class Scene {
     private context: CanvasRenderingContext2D;
     private dataPixel: Uint8ClampedArray;
 
-    constructor(name) {
-        this.img = ImageLoader.get(name + "_scene",
-            () => {
-                console.log("loading scene...")
-                let canvas = document.createElement('canvas');
-                canvas.width = this.img.width;
-                canvas.height = this.img.height;
-                this.context = canvas.getContext('2d');
-                this.context.fillStyle = "#FFFFFF";
-                this.context.fillRect(0, 0, this.img.width, this.img.height);
-                this.context.imageSmoothingEnabled = false;
-                this.context.drawImage(this.img, 0, 0);
-                this.dataPixel = this.context.getImageData(0, 0, this.img.width, this.img.height).data;
+    constructor(imgForeGround) {
+        this.img = imgForeGround;
 
-                for (let i = 0; i < this.dataPixel.length; i++)
-                    if (this.dataPixel[i] < 64) {
-                        console.log(i);
-                        return;
-                    }
-            });
+        console.log("loading scene...")
+        let canvas = document.createElement('canvas');
+        canvas.width = this.img.width;
+        canvas.height = this.img.height;
+        this.context = canvas.getContext('2d');
+        this.context.fillStyle = "#FFFFFF";
+        this.context.fillRect(0, 0, this.img.width, this.img.height);
+        this.context.imageSmoothingEnabled = false;
+        this.context.drawImage(this.img, 0, 0);
+        this.dataPixel = this.context.getImageData(0, 0, this.img.width, this.img.height).data;
+
+        for (let i = 0; i < this.dataPixel.length; i++)
+            if (this.dataPixel[i] < 64) {
+                console.log(i);
+                return;
+            }
+
 
     }
 
@@ -97,7 +97,7 @@ export class Scene {
                     let yw = 1;//-Math.abs(y)/(SIZE/2);
                     if (iy < 0) v.x += -ix * xw;
 
-                    
+
 
                     if (obj.speed.y < 0) {
                         yw = 3 * (SIZEY / 2 - Math.abs(iy)) / (SIZEY / 2);
@@ -107,7 +107,7 @@ export class Scene {
                         yw = 0.5 * (SIZEY / 2 - Math.abs(iy)) / (SIZEY / 2);
                         if (iy < SIZEY / 2 - 2 && obj.speed.y > 0) v.y += -iy * yw;// * (SIZEY/2-Math.abs(iy))/(SIZEY/2);
                     }
-                        
+
 
                     //if (iy < SIZEY / 2 - 2) v.y += -iy * yw;
                 }

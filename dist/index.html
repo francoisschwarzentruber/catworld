@@ -2,48 +2,58 @@
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <script src="Main.js" type="module"></script>
   <link rel="stylesheet" type="text/css" href="css/style.css" />
 </head>
 
 <body>
-  <h1>Catworld</h1>
+  <canvas class="hidden" id="canvas" width=640 height=480></canvas>
+  <div id="titlescreen">
+    <h1>Catworld</h1>
 
-  In this game, Dédé the cat has to save the world from evil capitalists. To this aim, Dédé has to move (by pressing the
-  left and right arrows), to jump (up arrow), and to throw love (press spacebar) to convert capitalists into lovely
-  hippies.
+    In this platform video game, Dédé the cat has to save the world from evil capitalists. To this aim, Dédé has to move
+    (by pressing the
+    left and right arrows), to jump (up arrow), and to throw love (press spacebar) to convert capitalists into lovely
+    hippies. You can also use your gamepad.
 
-  <h2>Choose your level</h2>
-  <a href="game.html?id=simple">
-    <img src="images/simple_scene.png" />
-  </a>
-  <a href="game.html?id=campagne">
-    <img src="images/campagne_scene.png" /></a>
+    <h2>Choose your level</h2>
+    <a>
+      <img id="simple" src="images/simple_scene.png" />
+    </a>
+    <a>
+      <img id="campagne" src="images/campagne_scene.png" /></a>
 
-  <a href="game.html?id=francois">
-    <img src="images/francois_scene.png" /></a>
-  <a href="game.html?id=karine">
-    <img src="images/karine_scene.png" />
-  </a>
-  <a href="game.html?id=usine">
-    <img src="images/usine_scene.png" />
-  </a>
+    <a>
+      <img id="francois" src="images/francois_scene.png" /></a>
+    <a>
+      <img id="karine" src="images/karine_scene.png" />
+    </a>
+    <a>
+      <img id="usine" src="images/usine_scene.png" />
+    </a>
 
-  <a href="game.html?id=rossini">
-    <img src="images/rossini_scene.png" />
-  </a>
-  <a href="game.html?id=rossini_harder">
-    <img src="images/rossini_harder_scene.png" />
-  </a>
+    <a>
+      <img id="rossini" src="images/rossini_scene.png" />
+    </a>
+    <a>
+      <img id="rossini_harder" src="images/rossini_harder_scene.png" />
+    </a>
 
-  <a href="game.html?id=desert">
-    <img src="images/desert_scene.png" />
-  </a>
+    <a>
+      <img id="desert" src="images/desert_scene.png" />
+    </a>
 
-  <h2>Authors</h2>
-  Character design: Karine Morin</br>
-  Level design: Karine Morin and François Schwarzentruber</br>
-  Program: François Schwarzentruber
+    <a>
+      <img id="espace" src="images/espace_scene.png" />
+    </a>
 
+    <input type="file"></input>
+
+    <h2>Authors</h2>
+    Character design: Karine Morin</br>
+    Level design: Karine Morin and François Schwarzentruber</br>
+    Program: François Schwarzentruber
+  </div>
 
 </body>
 

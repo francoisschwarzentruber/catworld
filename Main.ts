@@ -1,5 +1,6 @@
 import { Game } from "./src/Game.js";
 import { gamePadHandler } from "./src/Gamepad.js";
+import { ImageLoader } from "./src/ImageLoader.js";
 
 
 let keyBoardKeys = [];
@@ -9,9 +10,12 @@ let fps, fpsInterval, startTime, now, then, elapsed;
 
 
 
-function load() {
+function startGame(imgForeGround, imgBackGround) {
+    document.getElementById("titlescreen").setAttribute("class", "hidden");
     let canvas: HTMLCanvasElement = <HTMLCanvasElement>document.getElementById("canvas");
-    let g = new Game(canvas, new URL(window.location.href).searchParams.get("id"));
+    canvas.setAttribute("class", "e");
+    let g = new Game(canvas, imgForeGround, imgBackGround);
+    // new URL(window.location.href).searchParams.get("id")
 
     function handleKeys() {
         if (keyBoardKeys[37])
@@ -82,6 +86,32 @@ function load() {
 }
 
 
+function startGameWithName(name) {
+    startGame(ImageLoader.get(name + "_scene"), ImageLoader.get(name + "_background"));
+}
+
+
+function startGameUpload(img) {
+    startGame(img, undefined);
+}
+
+
+function load() {
+    let levelButtons = document.getElementsByTagName("img")
+    for (let i = 0; i < levelButtons.length; i++) {
+        levelButtons[i].addEventListener("click", () => startGameWithName(levelButtons[i].id))
+    }
+
+
+    document.querySelector('input[type="file"]').addEventListener('change', function () {
+        if (this.files && this.files[0]) {
+            let img = new Image();//document.querySelector('img');  // $('img')[0]
+            img.src = URL.createObjectURL(this.files[0]); // set src to blob url
+            img.onload = () => startGameUpload(img);
+        }
+    });
+    document.getElementById("upload").addEventListener("click", startGameUpload);
+}
 
 window.onload = load;
 

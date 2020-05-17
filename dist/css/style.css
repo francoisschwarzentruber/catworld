@@ -23,3 +23,8 @@ a img {
     border: 1px solid;
     background-color: white;
 }
+
+
+.hidden {
+    display: none;
+}
