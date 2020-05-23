@@ -8,7 +8,7 @@ import { Sound } from './Sound.js';
 import { ImageLoader } from './ImageLoader.js';
 
 
-const LIFEPOINT_SIZE = 32;
+const LIFEPOINT_SIZE = 16;
 const NUMBER_LIFEPOINTS = 3;
 
 
@@ -136,6 +136,7 @@ export class Game {
 
 
     draw() {
+        const SCALE = 1;
         if (!ImageLoader.isAllLoaded()) return;
 
         if (!this.win && !this.lost) {
@@ -161,8 +162,8 @@ export class Game {
         context.clearRect(0, 0, 640, 480);
 
         context.resetTransform();
-        context.translate(-camera.x * 2, -camera.y * 2);
-        context.scale(2, 2);
+        context.translate(-camera.x * SCALE, -camera.y * SCALE);
+        context.scale(SCALE, SCALE);
 
         this.drawClippingThatsAllFolks(context);
 
