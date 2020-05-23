@@ -4,10 +4,24 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <script src="Main.js" type="module"></script>
   <link rel="stylesheet" type="text/css" href="css/style.css" />
+  <meta 
+     name='viewport' 
+     content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' 
+/>
 </head>
 
-<body>
-  <canvas class="hidden" id="canvas" width=640 height=480></canvas>
+<body oncontextmenu="return false;">
+  <div class="hidden" id="game">
+    <div id="direction">
+      <button id="left">left</button>
+      <button id="right">right</button>
+    </div>
+    <canvas  id="canvas" width=640 height=480></canvas>
+    <div id="control">
+      <button id="action">heart</button>
+      <button id="jump">jump</button>
+    </div>
+  </div>
   <div id="titlescreen">
     <h1>Catworld</h1>
 
@@ -17,16 +31,11 @@
     hippies. You can also use your gamepad.
 
     <h2>Either Play in Your Own World</h2>
+Upload your own world. You can either use a software or take a photo of a handmade picture! Obstacles are in black.
 
-    <ul>
-      <li>Draw your level and save it in a png/jpg file with ~ 2000 X 500 pixels (could be more, but do not give a too
-        small image). You can either use a software or take a photo of a handmade picture! Obstacles are in black.</li>
+        <input type="file"></input>
 
-      <li>Then load or drag and drop your image:
-        <input type="file"></input></li>
-    </ul>
-
-    <h2>Or Choose Some Predefined Level</h2>
+    <h2>Or Play in a Predefined Level</h2>
     <a>
       <img id="simple" src="images/simple_scene.png" />
     </a>

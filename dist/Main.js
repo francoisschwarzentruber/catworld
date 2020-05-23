@@ -2,13 +2,21 @@ import { Game } from "./src/Game.js";
 import { gamePadHandler } from "./src/Gamepad.js";
 import { ImageLoader } from "./src/ImageLoader.js";
 var keyBoardKeys = [];
+var screenButton = { left: false, right: false };
 var fps, fpsInterval, startTime, now, then, elapsed;
 function startGame(imgForeGround, imgBackGround) {
     document.getElementById("titlescreen").setAttribute("class", "hidden");
+    document.getElementById("game").setAttribute("class", "e");
     var canvas = document.getElementById("canvas");
-    canvas.setAttribute("class", "e");
     var g = new Game(canvas, imgForeGround, imgBackGround);
     // new URL(window.location.href).searchParams.get("id")
+    document.getElementById("left").addEventListener("touchstart", function () { screenButton.left = true; screenButton.right = false; });
+    document.getElementById("left").addEventListener("touchend", function () { screenButton.left = false; screenButton.left = false; });
+    document.getElementById("left").addEventListener("touchcancel", function () { screenButton.left = false; screenButton.left = false; });
+    document.getElementById("right").addEventListener("touchstart", function () { screenButton.left = false; screenButton.right = true; });
+    document.getElementById("right").addEventListener("touchend", function () { screenButton.left = false; screenButton.right = false; });
+    document.getElementById("jump").addEventListener("touchstart", function () { return g.up(); });
+    document.getElementById("action").addEventListener("touchstart", function () { return g.action(); });
     function handleKeys() {
         if (keyBoardKeys[37])
             if (keyBoardKeys[37])
@@ -17,6 +25,13 @@ function startGame(imgForeGround, imgBackGround) {
             g.right();
         if (keyBoardKeys[38])
             g.up();
+    }
+    function handleScreenButton() {
+        console.log(screenButton);
+        if (screenButton.left)
+            g.left();
+        if (screenButton.right)
+            g.right();
     }
     function handleGamePad(gamePad) {
         if (gamePad == null)
@@ -45,6 +60,7 @@ function startGame(imgForeGround, imgBackGround) {
             then = now - (elapsed % fpsInterval);
             // Put your drawing code here
             handleKeys();
+            handleScreenButton();
             gamePadHandler(handleGamePad);
             g.draw();
             //should be outside animLoop, but when outside, it does not work

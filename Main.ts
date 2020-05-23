@@ -4,6 +4,7 @@ import { ImageLoader } from "./src/ImageLoader.js";
 
 
 let keyBoardKeys = [];
+let screenButton = { left: false, right: false };
 let fps, fpsInterval, startTime, now, then, elapsed;
 
 
@@ -12,10 +13,26 @@ let fps, fpsInterval, startTime, now, then, elapsed;
 
 function startGame(imgForeGround, imgBackGround) {
     document.getElementById("titlescreen").setAttribute("class", "hidden");
+
+    document.getElementById("game").setAttribute("class", "e");
     let canvas: HTMLCanvasElement = <HTMLCanvasElement>document.getElementById("canvas");
-    canvas.setAttribute("class", "e");
+
     let g = new Game(canvas, imgForeGround, imgBackGround);
     // new URL(window.location.href).searchParams.get("id")
+
+
+    document.getElementById("left").addEventListener("touchstart",
+        () => { screenButton.left = true; screenButton.right = false; });
+    document.getElementById("left").addEventListener("touchend",
+        () => { screenButton.left = false; screenButton.left = false; });
+    document.getElementById("left").addEventListener("touchcancel",
+        () => { screenButton.left = false; screenButton.left = false; });
+    document.getElementById("right").addEventListener("touchstart", 
+    () => { screenButton.left = false; screenButton.right = true });
+    document.getElementById("right").addEventListener("touchend", 
+    () => { screenButton.left = false; screenButton.right = false });
+    document.getElementById("jump").addEventListener("touchstart", () => g.up());
+    document.getElementById("action").addEventListener("touchstart", () => g.action());
 
     function handleKeys() {
         if (keyBoardKeys[37])
@@ -23,6 +40,15 @@ function startGame(imgForeGround, imgBackGround) {
         if (keyBoardKeys[39]) g.right();
         if (keyBoardKeys[38]) g.up();
     }
+
+
+
+    function handleScreenButton() {
+        console.log(screenButton)
+        if (screenButton.left) g.left();
+        if (screenButton.right) g.right();
+    }
+
 
     function handleGamePad(gamePad: Gamepad) {
         if (gamePad == null) return;
@@ -60,6 +86,7 @@ function startGame(imgForeGround, imgBackGround) {
 
 
             handleKeys();
+            handleScreenButton();
             gamePadHandler(handleGamePad);
             g.draw();
 
@@ -111,6 +138,9 @@ function load() {
         }
     });
     document.getElementById("upload").addEventListener("click", startGameUpload);
+
+
+
 }
 
 window.onload = load;
