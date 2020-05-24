@@ -1,4 +1,5 @@
 export class Scene {
+
     private imgScene: HTMLImageElement;
     private context: CanvasRenderingContext2D;
     private dataPixel: Uint8ClampedArray;
@@ -33,9 +34,26 @@ export class Scene {
         //return 255;
     }
 
+
+    isObstacle (x, y) {
+        return this.getPixel(x, y) < 64;
+    }
+
     draw(context) {
         context.drawImage(this.imgScene, 0, 0);
     }
+
+
+    getYGround(x: number): number {
+        for(let y = 200; y < this.height-1; y++) {
+            if(this.isObstacle(x, y))
+                return y;
+        }
+        return undefined;
+    }
+
+
+
 
     /**
      * 
@@ -51,7 +69,7 @@ export class Scene {
 
 
         let isObstacle = (x, y) => {
-            return this.getPixel(x + obj.position.x, y + obj.position.y) < 64;
+            return this.isObstacle(x + obj.position.x, y + obj.position.y);
         }
 
 

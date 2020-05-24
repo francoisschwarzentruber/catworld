@@ -10,6 +10,8 @@ import { ImageLoader } from './ImageLoader.js';
 
 const LIFEPOINT_SIZE = 16;
 const NUMBER_LIFEPOINTS = 3;
+const WIDTH = 320;
+const HEIGHT = 240;
 
 
 export class Game {
@@ -18,7 +20,7 @@ export class Game {
     private scene: Scene;
     private imgBackground = undefined;
     private lastLoop: Date = new Date();
-    private characters = [];
+    private characters: PhysicalObject[] = [];
     private hearts = [];
     private clippingFactor = 0;
     private win: boolean = false;
@@ -26,13 +28,29 @@ export class Game {
     private lifepoints = NUMBER_LIFEPOINTS;
     private hurt = 0;
 
-    constructor(canvas: HTMLCanvasElement, imgForeGround, imgBackground) {
+    constructor(canvas: HTMLCanvasElement, imgForeGround: HTMLImageElement, imgBackground: HTMLImageElement) {
         Music.play("music");
         this.canvas = canvas;
         this.scene = new Scene(imgForeGround);
-        this.dede = new Character("cat", 48, { x: 200, y: this.scene.height / 2 });
-        for (let i = 0; i < 40; i++)
-            this.characters.push(new NPC("white_collar", 48, { x: 400 + Math.random() * 2500, y: 200 }));
+        let xdede = 200;
+        while(xdede < this.scene.width) {
+            let y = this.scene.getYGround(xdede);
+            if (y) {
+                this.dede = new Character("cat", 48, { x: xdede+64, y: y - 16});
+                break;
+            }
+                
+            xdede++;
+
+        }
+        
+        let x = WIDTH / 2;
+        while (x < this.scene.width) {
+            x += 100 + 300 * Math.random();
+            let y = this.scene.getYGround(x);
+            if (y)
+                this.characters.push(new NPC("white_collar", 48, { x: x, y: y }));
+        }
 
         this.imgBackground = imgBackground;//ImageLoader.get(name + "_background");
     }
@@ -76,13 +94,14 @@ export class Game {
 
         if (this.hurt == 0)
             for (let character of this.characters) {
-                if (character.name == "white_collar")
-                    if (PhysicalObject.intersect(this.dede, character)) {
-                        this.lifepoints--;
-                        Sound.play("hurt");
-                        this.hurt = 1;
-                        break;
-                    }
+                if (!this.tooFar(character))
+                    if (character.name == "white_collar")
+                        if (PhysicalObject.intersect(this.dede, character)) {
+                            this.lifepoints--;
+                            Sound.play("hurt");
+                            this.hurt = 1;
+                            break;
+                        }
             }
 
 
@@ -95,15 +114,16 @@ export class Game {
 
         for (let heart of this.hearts) {
             for (let character of this.characters)
-                if (character.name == "white_collar") {
-                    if (PhysicalObject.intersect(heart, character)) {
-                        console.log("un white_collar doit mourir");
-                        Sound.play("oh");
-                        this.characters.push(new NPC("gauchiste", 48, character.position));
-                        this.removeCharacter(character);
-                        this.removeHeart(heart);
+                if (!this.tooFar(character))
+                    if (character.name == "white_collar") {
+                        if (PhysicalObject.intersect(heart, character)) {
+                            console.log("un white_collar doit mourir");
+                            Sound.play("oh");
+                            this.characters.push(new NPC("gauchiste", 48, character.position));
+                            this.removeCharacter(character);
+                            this.removeHeart(heart);
+                        }
                     }
-                }
         }
 
 
@@ -134,6 +154,14 @@ export class Game {
     }
 
 
+    tooFar(o: PhysicalObject): boolean {
+        if (Math.abs(o.position.x - this.dede.position.x) > WIDTH)
+            return true;
+        if (Math.abs(o.position.y - this.dede.position.y) > HEIGHT)
+            return true;
+        return false;
+    }
+
 
     draw() {
         const SCALE = 1;
@@ -142,7 +170,8 @@ export class Game {
         if (!this.win && !this.lost) {
             this.liveCharacter(this.dede);
             for (let character of this.characters)
-                this.liveCharacter(character);
+                if (!this.tooFar(character))
+                    this.liveCharacter(character);
 
             for (let heart of this.hearts)
                 heart.live();
@@ -150,16 +179,16 @@ export class Game {
         }
 
 
-        let camera = { x: this.dede.position.x - 640 / 4, y: this.dede.position.y - 480 / 4 };
+        let camera = { x: this.dede.position.x - WIDTH / 2, y: this.dede.position.y - HEIGHT / 2 };
         if (camera.x < 0) camera.x = 0;
         if (camera.y < 0) camera.y = 0;
 
-        camera.y = Math.min(camera.y, this.scene.height - 480 / 2);
-        camera.x = Math.min(camera.x, this.scene.width - 640 / 2);
+        camera.x = Math.min(camera.x, this.scene.width - WIDTH);
+        camera.y = Math.min(camera.y, this.scene.height - HEIGHT);
 
         let context = this.canvas.getContext("2d");
-        context.imageSmoothingEnabled = false;
-        context.clearRect(0, 0, 640, 480);
+        context.imageSmoothingEnabled = true;
+        context.clearRect(0, 0, WIDTH, HEIGHT);
 
         context.resetTransform();
         context.translate(-camera.x * SCALE, -camera.y * SCALE);
@@ -185,14 +214,15 @@ export class Game {
         else
             context.filter = "none";
 
-        if(this.imgBackground != undefined)
+        if (this.imgBackground != undefined)
             context.drawImage(this.imgBackground, camera.x / 2, camera.y / 2);
 
 
         this.scene.draw(context);
 
         for (let character of this.characters)
-            character.draw(context);
+            if (!this.tooFar(character))
+                character.draw(context);
 
         for (let heart of this.hearts)
             heart.draw(context);

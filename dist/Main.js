@@ -27,7 +27,6 @@ function startGame(imgForeGround, imgBackGround) {
             g.up();
     }
     function handleScreenButton() {
-        console.log(screenButton);
         if (screenButton.left)
             g.left();
         if (screenButton.right)

@@ -44,7 +44,6 @@ function startGame(imgForeGround, imgBackGround) {
 
 
     function handleScreenButton() {
-        console.log(screenButton)
         if (screenButton.left) g.left();
         if (screenButton.right) g.right();
     }
